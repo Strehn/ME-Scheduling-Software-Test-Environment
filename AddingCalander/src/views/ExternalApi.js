@@ -113,10 +113,8 @@ export const ExternalApiComponent = () => {
           </Alert>
         )}
 
-        <h1>Create a Reservation</h1>
+        <h1>External API</h1>
         <p>
-          Create a reservation by filling out the form below.
-          
           Ping an external API by clicking the button below. This will call the
           external API using an access token, and the API will validate it using
           the API's audience value.
