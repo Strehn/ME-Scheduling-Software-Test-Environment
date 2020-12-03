@@ -61,7 +61,7 @@ const NavBar = () => {
                     exact
                     activeClassName="router-link-exact-active"
                   >
-                    External API
+                    Reservations
                   </NavLink>
                 </NavItem>
               )}
@@ -97,7 +97,7 @@ const NavBar = () => {
                       className="dropdown-profile"
                       activeClassName="router-link-exact-active"
                     >
-                      <FontAwesomeIcon icon="user" className="mr-3" /> Profile
+                      <FontAwesomeIcon icon="user" className="mr-3" /> My Reservations
                     </DropdownItem>
                     <DropdownItem
                       id="qsLogoutBtn"

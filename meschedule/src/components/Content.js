@@ -2,8 +2,6 @@ import React, { Component } from "react";
 
 import { Row, Col } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import contentData from "../utils/contentData";
 import Calendar from "./Calander";
 
 class Content extends Component {
@@ -11,7 +9,7 @@ class Content extends Component {
     return (
       <div className="text-center hero my-5">
         <h2 className="text-center hero my-5">Weekly Schedule</h2>
-        <Calendar />
+        <Calendar/>
       </div>
     );
   }
