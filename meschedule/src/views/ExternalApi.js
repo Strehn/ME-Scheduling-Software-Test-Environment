@@ -121,9 +121,13 @@ export const ExternalApiComponent = () => {
        
 
               <Scheduler />
+
+
         <Button color="primary" className="mt-5" onClick={callApi}>
-          Submit
+                  Submit
         </Button>
+
+
       </div>
 
       <div className="result-block-container">
