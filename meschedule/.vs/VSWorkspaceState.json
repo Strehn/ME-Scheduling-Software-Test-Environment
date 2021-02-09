@@ -4,9 +4,13 @@
     "\\src",
     "\\src\\assets",
     "\\src\\components",
+    "\\src\\components\\Dates",
+    "\\src\\components\\Navigation",
+    "\\src\\components\\Schedule",
+    "\\src\\hoc",
     "\\src\\utils",
     "\\src\\views"
   ],
-  "SelectedNode": "\\src\\views\\Profile.js",
+  "SelectedNode": "\\src\\hoc\\RoomAvailability.js",
   "PreviewInSolutionExplorer": false
 }

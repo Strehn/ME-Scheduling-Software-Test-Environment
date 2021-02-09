@@ -5,7 +5,7 @@ import axios from '../axios-bookings';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 
-import DayPicker from '../components/Dates/DayPicker';
+import CalanderDayPicker from '../components/Dates/DayPicker';
 import Scheduler from '../components/Schedule/Scheduler';
 
 const styles = theme => ({

@@ -6,7 +6,7 @@ import Scheduler, {
     DATE_FORMAT
 } from "react-big-scheduler";
 import "react-big-scheduler/lib/css/style.css";
-import withDragDropContext from "./withDnDContext";
+import DragDropContext from "./withDnDContext";
 import moment from "moment";
 
 import axios from "../../axios-bookings";
@@ -18,6 +18,7 @@ const schedulerData = new SchedulerData(
     false,
     false,
     {
+        displayWeekend: false,
         headerEnabled: true,
         dayCellWidth: 30,
         nonAgendaDayCellHeaderFormat: "D/M|HH:mm"
@@ -130,4 +131,4 @@ class CalendarScheduler extends Component {
     };
 }
 
-export default withDragDropContext(CalendarScheduler);
+export default DragDropContext(CalendarScheduler);

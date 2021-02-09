@@ -99,6 +99,16 @@ const NavBar = () => {
                     >
                       <FontAwesomeIcon icon="user" className="mr-3" /> My Reservations
                     </DropdownItem>
+
+                    <DropdownItem
+                      tag={RouterNavLink}
+                        to="/adminmanager"
+                        className="dropdown-profile"
+                        activeClassName="router-link-exact-active"
+                     >
+                      <FontAwesomeIcon icon="user" className="mr-3" /> Admin Tools
+                    </DropdownItem>
+
                     <DropdownItem
                       id="qsLogoutBtn"
                       onClick={() => logoutWithRedirect()}
