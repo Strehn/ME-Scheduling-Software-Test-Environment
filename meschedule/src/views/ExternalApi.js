@@ -4,6 +4,8 @@ import Highlight from "../components/Highlight";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import config from "../auth_config.json";
 import Loading from "../components/Loading";
+import Content from "../components/Content";
+import Scheduler from "../components/makeRes";
 
 const { apiOrigin = "http://localhost:3001" } = config;
 
@@ -113,16 +115,14 @@ export const ExternalApiComponent = () => {
           </Alert>
         )}
 
-        <h1>Reservations</h1>
-        <p>
-          Fill out this form to make a reservation.
-          Ping an external API by clicking the button below. This will call the
-          external API using an access token, and the API will validate it using
-          the API's audience value.
-        </p>
+              <h1>Reservations</h1>
+              <Content />
+              <hr />
+       
 
+              <Scheduler />
         <Button color="primary" className="mt-5" onClick={callApi}>
-          Ping API
+          Submit
         </Button>
       </div>
 
