@@ -7,8 +7,11 @@ import Footer from "./components/Footer";
 import Home from "./views/Home";
 import Profile from "./views/Profile";
 import ExternalApi from "./views/ExternalApi";
+import AdminManager from "./views/AdminManager";
 import { useAuth0 } from "@auth0/auth0-react";
 import history from "./utils/history";
+import { Provider } from "react-redux";
+import store from "./store";
 
 // styles
 import "./App.css";
@@ -29,6 +32,7 @@ const App = () => {
   }
 
   return (
+    <Provider  store={store}>
     <Router history={history}>
       <div id="app" className="d-flex flex-column h-100">
         <NavBar />
@@ -37,11 +41,13 @@ const App = () => {
             <Route path="/" exact component={Home} />
             <Route path="/profile" component={Profile} />
             <Route path="/external-api" component={ExternalApi} />
+            <Route path="/adminmanager" component={AdminManager} />
           </Switch>
         </Container>
         <Footer />
       </div>
     </Router>
+    </Provider>
   );
 };
 
