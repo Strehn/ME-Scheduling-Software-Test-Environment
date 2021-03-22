@@ -42,4 +42,8 @@ app.get("/api/external", checkJwt, (req, res) => {
   });
 });
 
+app.get('/authorized', function (req, res) {
+    res.send('Secured Resource');
+});
+
 app.listen(port, () => console.log(`API Server listening on port ${port}`));

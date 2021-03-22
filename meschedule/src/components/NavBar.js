@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { NavLink as RouterNavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import config from "../auth_config.json";
 import {
   Collapse,
   Container,
@@ -20,7 +20,47 @@ import {
 
 import { useAuth0 } from "@auth0/auth0-react";
 
+const { apiOrigin = "http://localhost:3001" } = config;
+
 const NavBar = () => {
+    // Used for Role Based Access Control
+
+    const [state, setState] = useState({
+        showResult: false,
+        endpointMessage: "",
+        error: null
+    });
+
+    const {
+        getAccessTokenSilently
+    } = useAuth0();
+
+    const callRoleBasedEndpoint = async () => {
+        try {
+            const token = await getAccessTokenSilently();
+            const response = await fetch(`${apiOrigin}/api/protected/role`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const responseData = await response.json();
+            setState({
+                ...state,
+                showResult: true,
+                endpointMessage: responseData
+            });
+        } catch (error) {
+            setState({
+                ...state,
+                error: error.error
+            });
+        }
+    };
+    // The admin tools in the dropdown menu should check to see if the user token has the
+    // access:tools permission and if so allow it to access the page otherwise 
+    // print an error like "You do not have Access to Admin Tools, if you feel this is a mistake please
+    // contact the ME Team"
+
   const [isOpen, setIsOpen] = useState(false);
   const {
     user,

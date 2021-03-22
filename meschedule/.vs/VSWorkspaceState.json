@@ -3,14 +3,10 @@
     "",
     "\\src",
     "\\src\\components",
-    "\\src\\components\\Dates",
-    "\\src\\components\\Navigation",
-    "\\src\\components\\Schedule",
-    "\\src\\components\\Tools",
-    "\\src\\hoc",
     "\\src\\utils",
-    "\\src\\views"
+    "\\src\\views",
+    "\\src\\views\\__tests__"
   ],
-  "SelectedNode": "\\src\\components\\Highlight.js",
+  "SelectedNode": "\\src\\index.js",
   "PreviewInSolutionExplorer": false
 }
