@@ -1,0 +1,47 @@
+.machineSchedulerContainer {
+    border: 1px solid #000;
+    display: flex;
+}
+
+.schedulerColumn {
+    border-right: 1px solid #000;
+    width: 158px;
+}
+
+.schedulerColumn:last-child {
+    border-right: 0;
+}
+
+/* .schedulerColumn:last-child {
+    border-right: 0;
+} */
+
+.hourRow {
+    border-bottom: 1px solid #000;
+}
+
+.hourRow:last-child {
+    border-bottom: 0;
+}
+
+.vertCenter {
+    display: flex;
+    align-items: center;
+}
+
+.horiCenter {
+    display: flex;
+    justify-content: center;
+}
+
+.timeContainer {
+    position: relative;
+}
+
+.reservedTime {
+    background: rgba(248, 163, 6, 0.5);
+    border-radius: 5px;
+    width: 135px;
+    position: absolute;
+    left: 10px;
+}

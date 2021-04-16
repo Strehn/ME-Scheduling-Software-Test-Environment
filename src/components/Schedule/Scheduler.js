@@ -9,8 +9,12 @@ import "react-big-scheduler/lib/css/style.css";
 import DragDropContext from "./withDnDContext";
 import moment from "moment";
 
+import MachineScheduler from "../MachineScheduler";
+
 import axios from "../../axios-bookings";
 import BookingDialog from "./BookingDialog";
+import ReservationForm from "../Reservations/ReservationForm";
+
 
 const schedulerData = new SchedulerData(
     new moment().format(DATE_FORMAT),
@@ -21,11 +25,67 @@ const schedulerData = new SchedulerData(
         displayWeekend: false,
         headerEnabled: true,
         dayCellWidth: 30,
-        nonAgendaDayCellHeaderFormat: "D/M|HH:mm"
+        nonAgendaDayCellHeaderFormat: "M/D|HH:mm"
     }
 );
 schedulerData.localeMoment.locale("en");
 schedulerData.setMinuteStep(30);
+
+/*
+    We don't know what the machine object will look like so we are guessing for now.
+    In the future, we will probably call some server endpoint to get a list of machines.
+*/
+const machines = [
+    {
+        id: "lathe_1",
+        name: "Lathe 1",
+    },
+    {
+        id: "lathe_2",
+        name: "Lathe 2"
+    },
+    {
+        id: "computer",
+        name: "Computer"
+    },
+    {
+        id: "printer",
+        name: "3D Printer"
+    },
+    {
+        id: "remote_login_pc",
+        name: "Remote Login PC"
+    },
+    {
+        id: "sindoh",
+        name: "Sindoh 1"
+    }
+]
+
+/*
+We also don't know what the data structure will look like for reserved times on machines.
+This should also come from some server call.
+Assuming we get a list of reserved times on some day for some machine.
+*/
+const reservedTimes = {
+    machineid_1: [
+        {
+            startTime: moment(11, "HH").toISOString(),
+            endTime: moment(13, "HH").toISOString()
+        },
+        {
+            startTime: moment(17, "HH").toISOString(),
+            endTime: moment(19, "HH").toISOString()
+        }
+    ],
+    machineid_2: [
+        {
+            startTime: moment(14, "HH").toISOString(),
+            endTime: moment(15, "HH").toISOString()
+        }
+    ]
+};
+
 
 class CalendarScheduler extends Component {
     state = {
@@ -52,7 +112,10 @@ class CalendarScheduler extends Component {
 
         return (
             <div>
-                <Scheduler
+                <ReservationForm/>
+                <MachineScheduler startHour={7} endHour={20} machines={machines} reservedTimes={reservedTimes} />
+                
+                {/* <Scheduler
                     schedulerData={viewModel}
                     prevClick={this.prevClick}
                     nextClick={this.nextClick}
@@ -61,7 +124,7 @@ class CalendarScheduler extends Component {
                 />
                 {this.state.showBookingDialog === true && (
                     <BookingDialog open onClose={this.handleClose} />
-                )}
+                )} */}
             </div>
         );
     }
@@ -70,40 +133,42 @@ class CalendarScheduler extends Component {
         this.setState({
             showBookingDialog: true
         });
-        // if (window.confirm(`Do you want to create a new event? {slotId: ${slotId}, slotName: ${slotName}, start: ${start}, end: ${end}, type: ${type}, item: ${item}}`)) {
-        //     let newFreshId = 0;
-        //     schedulerData.events.forEach((item) => {
-        //         if (item.id >= newFreshId)
-        //             newFreshId = item.id + 1;
-        //     });
-        //     let newEvent = {
-        //         id: newFreshId,
-        //         title: 'New event you just created',
-        //         start: start,
-        //         end: end,
-        //         resourceId: slotId,
-        //         bgColor: 'purple'
-        //     }
-        //     schedulerData.addEvent(newEvent);
-        //     this.setState({
-        //         viewModel: schedulerData
-        //     })
-        //     const booking = {
-        //         id: newFreshId,
-        //         title: 'New event you just created',
-        //         start: start,
-        //         end: end,
-        //         resourceId: slotId,
-        //         customer: {
-        //             name: 'Joey',
-        //             ic: 'S12345678C',
-        //             mobile: '98765432',
-        //         }
-        //     }
-        //     axios.post('/bookings.json', booking)
-        //         .then(response => console.log(response))
-        //         .catch(error => console.log("hello"));
-        // }
+	/*
+         if (window.confirm(`Do you want to create a new event? {slotId: ${slotId}, slotName: ${slotName}, start: ${start}, end: ${end}, type: ${type}, item: ${item}}`)) {
+             let newFreshId = 0;
+             schedulerData.events.forEach((item) => {
+                 if (item.id >= newFreshId)
+                     newFreshId = item.id + 1;
+             });
+             let newEvent = {
+                 id: newFreshId,
+                 title: 'New event you just created',
+                 start: start,
+                 end: end,
+                 resourceId: slotId,
+                 bgColor: 'purple'
+             }
+             schedulerData.addEvent(newEvent);
+             this.setState({
+                 viewModel: schedulerData
+             })
+             const booking = {
+                 id: newFreshId,
+                 title: 'New event you just created',
+                 start: start,
+                 end: end,
+                 resourceId: slotId,
+                 customer: {
+                     name: 'Joey',
+                     ic: 'S12345678C',
+                     mobile: '98765432',
+                 }
+             }
+             axios.post('/bookings.json', booking)
+                 .then(response => console.log(response))
+                 .catch(error => console.log("hello"));
+         }
+	 */
     };
 
     prevClick = schedulerData => {

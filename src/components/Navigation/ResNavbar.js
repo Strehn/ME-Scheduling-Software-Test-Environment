@@ -14,6 +14,10 @@ const styles = theme => ({
 class Navbar extends Component {
     render() {
         const { classes } = this.props;
+        var today = new Date();
+        var month = today.getMonth() + 1;
+        var day = today.getDate();
+        var year = today.getFullYear();
         return (
             <div className={classes.root}>
                 <AppBar position="static" color="inherit">
