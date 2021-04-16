@@ -20,7 +20,7 @@ import {
 
 import { useAuth0 } from "@auth0/auth0-react";
 
-const { apiOrigin = "http://localhost:3001" } = config;
+const { apiOrigin = "http://localhost:5000" } = config;
 
 const NavBar = () => {
     // Used for Role Based Access Control
@@ -38,7 +38,7 @@ const NavBar = () => {
     const callRoleBasedEndpoint = async () => {
         try {
             const token = await getAccessTokenSilently();
-            const response = await fetch(`${apiOrigin}/api/protected/role`, {
+            const response = await fetch(`${apiOrigin}/api/role`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -57,7 +57,7 @@ const NavBar = () => {
         }
     };
     // The admin tools in the dropdown menu should check to see if the user token has the
-    // access:tools permission and if so allow it to access the page otherwise 
+    // access:tools permission and if so allow it to access the page otherwise
     // print an error like "You do not have Access to Admin Tools, if you feel this is a mistake please
     // contact the ME Team"
 
@@ -145,6 +145,7 @@ const NavBar = () => {
                         to="/adminmanager"
                         className="dropdown-profile"
                         activeClassName="router-link-exact-active"
+                        onClick={() => callRoleBasedEndpoint()}
                      >
                       <FontAwesomeIcon icon="user" className="mr-3" /> Admin Tools
                     </DropdownItem>

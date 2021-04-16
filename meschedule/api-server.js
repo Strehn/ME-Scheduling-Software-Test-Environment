@@ -5,6 +5,7 @@ const helmet = require("helmet");
 const jwt = require("express-jwt");
 const jwksRsa = require("jwks-rsa");
 const authConfig = require("./src/auth_config.json");
+const jwtAuthz = require("express-jwt-authz");
 
 const app = express();
 
@@ -36,6 +37,11 @@ const checkJwt = jwt({
   algorithms: ["RS256"]
 });
 
+const checkPermissions = jwtAuthz(["access:tools"], {
+  customScopeKey: "permissions",
+  checkAllScopes: true
+});
+
 app.get("/api/external", checkJwt, (req, res) => {
   res.send({
     msg: "Your access token was successfully validated!"
@@ -44,6 +50,12 @@ app.get("/api/external", checkJwt, (req, res) => {
 
 app.get('/authorized', function (req, res) {
     res.send('Secured Resource');
+});
+
+app.get("/api/role", checkJwt, checkPermissions, (req, res) => {
+  res.send({
+    msg: "You called the role endpoint!"
+  });
 });
 
 app.listen(port, () => console.log(`API Server listening on port ${port}`));

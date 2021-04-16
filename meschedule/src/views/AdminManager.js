@@ -17,8 +17,7 @@ import ChevronRight from '@material-ui/icons/ChevronRight';
 import FirstPage from '@material-ui/icons/FirstPage';
 import LastPage from '@material-ui/icons/LastPage';
 import DeleteOutline from '@material-ui/icons/DeleteOutline';
-
-
+import { withStyles } from '@material-ui/core/styles';
 
 
 const tableIcons = {
@@ -29,6 +28,12 @@ const tableIcons = {
     Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
 };
 
+const styles = theme => ({
+    dropdown: {
+        justifyContent: 'flex-start',
+        padding: theme.spacing(4)
+    },
+});
 
 class AdminTools extends Component {
 
@@ -52,7 +57,6 @@ class AdminTools extends Component {
       const { codes, getCodes } = this.props.codes;
 
     return (
-      
       <MaterialTable
           icons={tableIcons}
           title="Valid Billing Codes"
@@ -96,5 +100,6 @@ const mapStateToProps = state => ({
 // });
 
 export default compose(
+    withStyles(styles),
     connect(mapStateToProps, { getCodes, createCode, deleteCode })
 )(AdminTools);
