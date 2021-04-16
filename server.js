@@ -85,4 +85,4 @@ app.get("/api/role", checkJwt, checkPermissions, (req, res) => {
   });
 });
 
-app.listen(port, () => console.log(`Server listening on port ${port}`));
+app.listen(process.env.PORT || 5000, () => console.log(`Server listening on port ${port}`));
