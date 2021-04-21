@@ -180,10 +180,7 @@ export const ExternalApiComponent = () => {
               <Scheduler reservationData={reservationData} />
         </ReservationDataContext.Provider>
 
-        <Button color="primary" className="mt-5" onClick={callApi}>
-                  Submit
-        </Button>
-
+       
 
       </div>
 
