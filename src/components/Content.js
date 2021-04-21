@@ -8,7 +8,7 @@ class Content extends Component {
   render() {
     return (
       <div className="text-center hero my-5">
-        <h2 className="text-center hero my-5">Weekly Schedule</h2>
+        <h2 className="text-center hero my-5">Monthly Schedule</h2>
         <Calendar/>
       </div>
     );
