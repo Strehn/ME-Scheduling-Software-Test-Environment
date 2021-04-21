@@ -12,7 +12,9 @@ import ManageMachines from "./views/ManageMachines";
 import { useAuth0 } from "@auth0/auth0-react";
 import history from "./utils/history";
 import { Provider } from "react-redux";
+import { Auth0Provider } from "@auth0/auth0-react";
 import store from "./store";
+import config from "./auth_config.json";
 
 // styles
 import "./App.css";
@@ -20,6 +22,14 @@ import "./App.css";
 // fontawesome
 import initFontAwesome from "./utils/initFontAwesome";
 initFontAwesome();
+
+const onRedirectCallback = (appState) => {
+  history.push(
+    appState && appState.returnTo
+      ? appState.returnTo
+      : window.location.pathname
+  );
+};
 
 const App = () => {
   const { isLoading, error } = useAuth0();
@@ -33,6 +43,15 @@ const App = () => {
   }
 
   return (
+    <Auth0Provider
+      domain={config.domain}
+      clientId={config.clientId}
+      audience={config.audience}
+      redirectUri={window.location.origin}
+      onRedirectCallback={onRedirectCallback}
+      useRefreshTokens
+      cacheLocation="localstorage"
+    >
     <Provider  store={store}>
     <Router history={history}>
       <div id="app" className="d-flex flex-column h-100">
@@ -50,6 +69,7 @@ const App = () => {
       </div>
     </Router>
     </Provider>
+    </Auth0Provider>
   );
 };
 
