@@ -15,6 +15,8 @@ import axios from "../../axios-bookings";
 import BookingDialog from "./BookingDialog";
 import ReservationForm from "../Reservations/ReservationForm";
 
+import { getMachines } from '../../actions/machineActions';
+
 
 const schedulerData = new SchedulerData(
     new moment().format(DATE_FORMAT),
@@ -114,7 +116,7 @@ class CalendarScheduler extends Component {
             <div>
                 <ReservationForm/>
                 <MachineScheduler startHour={7} endHour={20} machines={machines} reservedTimes={reservedTimes} />
-                
+
                 {/* <Scheduler
                     schedulerData={viewModel}
                     prevClick={this.prevClick}

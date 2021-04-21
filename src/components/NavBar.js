@@ -20,7 +20,7 @@ import {
 
 import { useAuth0 } from "@auth0/auth0-react";
 
-const { apiOrigin = "http://localhost:5000" } = config;
+const { apiOrigin = "http://localhost:3000" } = config;
 
 const NavBar = () => {
     // Used for Role Based Access Control
@@ -49,6 +49,7 @@ const NavBar = () => {
                 showResult: true,
                 endpointMessage: responseData
             });
+            console.log("test");
         } catch (error) {
             setState({
                 ...state,
@@ -142,12 +143,22 @@ const NavBar = () => {
 
                     <DropdownItem
                       tag={RouterNavLink}
-                        to="/adminmanager"
+                        to="/manage-billing"
                         className="dropdown-profile"
                         activeClassName="router-link-exact-active"
-                        onClick={() => callRoleBasedEndpoint()}
+
                      >
-                      <FontAwesomeIcon icon="user" className="mr-3" /> Admin Tools
+                      <FontAwesomeIcon icon="user" className="mr-3" /> Manage Billing Codes
+                    </DropdownItem>
+
+                    <DropdownItem
+                      tag={RouterNavLink}
+                        to="/manage-machines"
+                        className="dropdown-profile"
+                        activeClassName="router-link-exact-active"
+
+                     >
+                      <FontAwesomeIcon icon="user" className="mr-3" /> Manage Machines
                     </DropdownItem>
 
                     <DropdownItem
@@ -199,6 +210,24 @@ const NavBar = () => {
                     activeClassName="router-link-exact-active"
                   >
                     Profile
+                  </RouterNavLink>
+                </NavItem>
+                <NavItem>
+                  <FontAwesomeIcon icon="user" className="mr-3" />
+                  <RouterNavLink
+                    to="/manage-billing"
+                    activeClassName="router-link-exact-active"
+                  >
+                    Manage Billing Codes
+                  </RouterNavLink>
+                </NavItem>
+                <NavItem>
+                  <FontAwesomeIcon icon="user" className="mr-3" />
+                  <RouterNavLink
+                    to="/manage-machines"
+                    activeClassName="router-link-exact-active"
+                  >
+                    Manage Machines
                   </RouterNavLink>
                 </NavItem>
                 <NavItem>

@@ -15,6 +15,7 @@ const authConfig = require("./src/auth_config.json");
 const jwtAuthz = require("express-jwt-authz");
 
 const billingcodes = require("./routes/api/billingcodes");
+const machines = require("./routes/api/machines");
 
 
 const appPort = process.env.SERVER_PORT || 3000;
@@ -53,6 +54,7 @@ app.use(passport.initialize());
 require("./config/passport")(passport);
 
 app.use("/api/billingcodes", billingcodes);
+app.use("/api/machines", machines);
 
 const port = process.env.SERVER_PORT || 5000;
 
@@ -80,9 +82,17 @@ const checkPermissions = jwtAuthz(["access:tools"], {
 
 
 app.get("/api/role", checkJwt, checkPermissions, (req, res) => {
-  res.send({
-    msg: "You called the role endpoint!"
-  });
+  console.log("hello role");
 });
+
+//Serve static assets iff in production
+if (process.env.NODE_ENV === 'production') {
+  //Set static folder
+  app.use(express.static("build"));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "build", "index.html"));
+  });
+}
 
 app.listen(process.env.PORT || 5000, () => console.log(`Server listening on port ${port}`));

@@ -1,7 +1,7 @@
 {
   "domain": "mesoftware.us.auth0.com",
   "clientId": "KiaTw7jULP9op9LMbdHXWluB4qhi6qKh",
-  "audience": "https://mesoftware.us.auth0.com/api/v2/",
-  "appOrigin": "http://localhost:3000",
-  "apiOrigin": "http://localhost:3000"
+  "audience": "https://ScheduleAdmin",
+  "appOrigin": "https://localhost:3000",
+  "apiOrigin": "https://localhost:3000"
 }

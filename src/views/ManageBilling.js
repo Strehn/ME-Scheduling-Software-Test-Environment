@@ -58,7 +58,7 @@ const styles = theme => ({
     },
 });
 
-class AdminTools extends Component {
+class ManageBilling extends Component {
 
   constructor(props) {
       super(props);
@@ -110,7 +110,7 @@ class AdminTools extends Component {
 }
 }
 
-AdminTools.propTypes = {
+ManageBilling.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
@@ -125,4 +125,4 @@ const mapStateToProps = state => ({
 export default compose(
     withStyles(styles),
     connect(mapStateToProps, { getCodes, createCode, deleteCode })
-)(AdminTools);
+)(ManageBilling);

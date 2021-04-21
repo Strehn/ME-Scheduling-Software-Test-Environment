@@ -7,7 +7,8 @@ import Footer from "./components/Footer";
 import Home from "./views/Home";
 import Profile from "./views/Profile";
 import ExternalApi from "./views/ExternalApi";
-import AdminManager from "./views/AdminManager";
+import ManageBilling from "./views/ManageBilling";
+import ManageMachines from "./views/ManageMachines";
 import { useAuth0 } from "@auth0/auth0-react";
 import history from "./utils/history";
 import { Provider } from "react-redux";
@@ -41,7 +42,8 @@ const App = () => {
             <Route path="/" exact component={Home} />
             <Route path="/profile" component={Profile} />
             <Route path="/external-api" component={ExternalApi} />
-            <Route path="/adminmanager" component={AdminManager} />
+            <Route path="/manage-billing" component={ManageBilling} />
+            <Route path="/manage-machines" component={ManageMachines} />
           </Switch>
         </Container>
         <Footer />
