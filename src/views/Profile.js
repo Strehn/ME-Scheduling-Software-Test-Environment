@@ -22,9 +22,12 @@ export const ProfileComponent = () => {
           <h2>{user.nickname}</h2>
           <p className="lead text-muted">{user.email}</p>
         </Col>
-      </Row>
+          </Row>
+          <hr />
       <Row>
-        <Highlight>{JSON.stringify(user, null, 2)}</Highlight>
+              <div className="mb-5">
+          <h2 className="mb-5">Your Reservations</h2>
+         </div>
       </Row>
     </Container>
   );
