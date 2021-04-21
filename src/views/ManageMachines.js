@@ -109,7 +109,11 @@ class ManageMachines extends Component {
           }}
           options={{
               exportButton: false,
-              search: true
+              search: true,
+              paging:true,
+              pageSize:10,       // make initial page size
+              emptyRowsWhenPaging: true,   //to make page size fix in case of less data rows
+              pageSizeOptions:[10,20,30,40]    // rows selection options
           }}
       />
     );
