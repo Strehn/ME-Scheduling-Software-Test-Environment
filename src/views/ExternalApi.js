@@ -179,20 +179,6 @@ export const ExternalApiComponent = () => {
 
               <Scheduler reservationData={reservationData} />
         </ReservationDataContext.Provider>
-
-       
-
-      </div>
-
-      <div className="result-block-container">
-        {state.showResult && (
-          <div className="result-block" data-testid="api-result">
-            <h6 className="muted">Result</h6>
-            <Highlight>
-              <span>{JSON.stringify(state.apiMessage, null, 2)}</span>
-            </Highlight>
-          </div>
-        )}
       </div>
     </>
   );
