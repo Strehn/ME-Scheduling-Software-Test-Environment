@@ -16,7 +16,9 @@ import BookingDialog from "./BookingDialog";
 import ReservationForm from "../Reservations/ReservationForm";
 
 import { getMachines } from '../../actions/machineActions';
-
+import PropTypes from "prop-types";
+import { compose } from 'redux';
+import { connect } from "react-redux";
 
 const schedulerData = new SchedulerData(
     new moment().format(DATE_FORMAT),
@@ -37,32 +39,32 @@ schedulerData.setMinuteStep(30);
     We don't know what the machine object will look like so we are guessing for now.
     In the future, we will probably call some server endpoint to get a list of machines.
 */
-const machines = [
-    {
-        id: "lathe_1",
-        name: "Lathe 1",
-    },
-    {
-        id: "lathe_2",
-        name: "Lathe 2"
-    },
-    {
-        id: "computer",
-        name: "Computer"
-    },
-    {
-        id: "printer",
-        name: "3D Printer"
-    },
-    {
-        id: "remote_login_pc",
-        name: "Remote Login PC"
-    },
-    {
-        id: "sindoh",
-        name: "Sindoh 1"
-    }
-]
+// const machines = [
+//     {
+//         id: "lathe_1",
+//         name: "Lathe 1",
+//     },
+//     {
+//         id: "lathe_2",
+//         name: "Lathe 2"
+//     },
+//     {
+//         id: "computer",
+//         name: "Computer"
+//     },
+//     {
+//         id: "printer",
+//         name: "3D Printer"
+//     },
+//     {
+//         id: "remote_login_pc",
+//         name: "Remote Login PC"
+//     },
+//     {
+//         id: "sindoh",
+//         name: "Sindoh 1"
+//     }
+// ]
 
 /*
 We also don't know what the data structure will look like for reserved times on machines.
@@ -106,11 +108,17 @@ class CalendarScheduler extends Component {
         this.setState({ showBookingDialog: false });
     };
 
+    componentDidMount() {
+        this.props.getMachines();
+    }
+
     render() {
         const { viewModel } = this.state;
 
         let schedulerData = this.state.viewModel;
         schedulerData.setResources(this.props.rooms);
+
+        const { machines, getMachines } = this.props.machines;
 
         return (
             <div>
@@ -198,4 +206,15 @@ class CalendarScheduler extends Component {
     };
 }
 
-export default DragDropContext(CalendarScheduler);
+CalendarScheduler.propTypes = {
+    classes: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    machines: state.machines
+});
+
+// export default DragDropContext(CalendarScheduler)
+export default compose(
+    connect(mapStateToProps, { getMachines })
+)(CalendarScheduler);
