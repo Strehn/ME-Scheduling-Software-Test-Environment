@@ -16,6 +16,7 @@ const jwtAuthz = require("express-jwt-authz");
 
 const billingcodes = require("./routes/api/billingcodes");
 const machines = require("./routes/api/machines");
+const reservations = require("./routes/api/reservations");
 
 
 const appPort = process.env.SERVER_PORT || 3000;
@@ -55,6 +56,7 @@ require("./config/passport")(passport);
 
 app.use("/api/billingcodes", billingcodes);
 app.use("/api/machines", machines);
+app.use("/api/reservations", reservations);
 
 const port = process.env.SERVER_PORT || 5000;
 

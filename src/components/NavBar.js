@@ -162,6 +162,16 @@ const NavBar = () => {
                     </DropdownItem>
 
                     <DropdownItem
+                      tag={RouterNavLink}
+                        to="/manage-reservations"
+                        className="dropdown-profile"
+                        activeClassName="router-link-exact-active"
+
+                     >
+                      <FontAwesomeIcon icon="user" className="mr-3" /> Manage Reservations
+                    </DropdownItem>
+
+                    <DropdownItem
                       id="qsLogoutBtn"
                       onClick={() => logoutWithRedirect()}
                     >
@@ -228,6 +238,15 @@ const NavBar = () => {
                     activeClassName="router-link-exact-active"
                   >
                     Manage Machines
+                  </RouterNavLink>
+                </NavItem>
+                <NavItem>
+                  <FontAwesomeIcon icon="user" className="mr-3" />
+                  <RouterNavLink
+                    to="/manage-reservations"
+                    activeClassName="router-link-exact-active"
+                  >
+                    Manage Reservations
                   </RouterNavLink>
                 </NavItem>
                 <NavItem>

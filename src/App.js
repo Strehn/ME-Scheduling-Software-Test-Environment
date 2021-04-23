@@ -9,6 +9,7 @@ import Profile from "./views/Profile";
 import ExternalApi from "./views/ExternalApi";
 import ManageBilling from "./views/ManageBilling";
 import ManageMachines from "./views/ManageMachines";
+import ManageReservations from "./views/ManageReservations";
 import { useAuth0 } from "@auth0/auth0-react";
 import history from "./utils/history";
 import { Provider } from "react-redux";
@@ -63,6 +64,7 @@ const App = () => {
             <Route path="/external-api" component={ExternalApi} />
             <Route path="/manage-billing" component={ManageBilling} />
             <Route path="/manage-machines" component={ManageMachines} />
+            <Route path="/manage-reservations" component={ManageReservations} />
           </Switch>
         </Container>
         <Footer />
