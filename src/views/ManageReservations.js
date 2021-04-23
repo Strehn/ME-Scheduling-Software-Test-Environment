@@ -124,9 +124,7 @@ class ManageReservations extends Component {
 }
 
 ManageReservations.propTypes = {
-    classes: PropTypes.object.isRequired,
-    upcomingreservations: PropTypes.object.isRequired,
-    pastreservations: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
