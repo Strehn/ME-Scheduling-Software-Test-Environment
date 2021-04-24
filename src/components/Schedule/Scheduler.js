@@ -112,6 +112,11 @@ class CalendarScheduler extends Component {
         this.props.getMachines();
     }
 
+    storeMachine = e => {
+    this.setState({ value: e.target.value });
+    console.log(this.state.value);
+    }
+
     render() {
         const { viewModel } = this.state;
 
@@ -120,8 +125,20 @@ class CalendarScheduler extends Component {
 
         const { machines, getMachines } = this.props.machines;
 
+        let machineList = machines.length > 0
+            && machines.map((item, i) => {
+                return (
+                    <option key={i} value={item.id}>{item.name}</option>
+                )
+            }, this);
+
         return (
             <div>
+            <select
+                onChange={this.storeMachine}
+            >
+              {machineList}
+              </select>
                 <ReservationForm/>
                 <MachineScheduler startHour={7} endHour={20} machines={machines} reservedTimes={reservedTimes} />
 
