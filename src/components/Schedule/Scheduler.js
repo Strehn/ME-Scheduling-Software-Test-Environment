@@ -120,6 +120,22 @@ class CalendarScheduler extends Component {
     this.setState({ value: e.target.value });
     }
 
+    storeStartTime = e => {
+    this.setState({ value: e.target.value });
+    }
+
+    storeEndTime = e => {
+    this.setState({ value: e.target.value });
+    }
+
+    storeBillingCode = e => {
+    this.setState({ value: e.target.value });
+    }
+
+    storeGradName = e => {
+    this.setState({ value: e.target.value });
+    }
+
     render() {
         const { viewModel } = this.state;
 
@@ -160,7 +176,40 @@ class CalendarScheduler extends Component {
               {machineList}
               </select>
               </div>
-                <ReservationForm/>
+              <div className="reservationrow">
+                  <div>Start Time:</div>
+                  <input
+                      type="time"
+                      min="09:00"
+                      max="18.30"
+                      onChange={this.storeStartTime}
+                  />
+              </div>
+              <div className="reservationrow">
+                  <div>End Time:</div>
+                  <input
+                      type="time"
+                      min="09:30"
+                      max="19:00"
+                      onChange={this.storeEndTime}
+                  />
+              </div>
+              <div className="reservationrow">
+                  <div>Grad Student Name:</div>
+                  <input
+                      type="text"
+                      onChange={this.storeGradName}
+                  />
+              </div>
+              <div className="reservationrow">
+                  <div>Billing Code:</div>
+                  <input
+                      type="text"
+                      onChange={this.storeBillingCode}
+                  />
+              </div>
+              <button type="button" >Create Reservation</button>
+                // <ReservationForm/>
                 <MachineScheduler startHour={7} endHour={20} machines={machines} reservedTimes={reservedTimes} />
 
                 {/* <Scheduler

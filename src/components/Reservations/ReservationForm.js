@@ -28,32 +28,6 @@ const ReservationForm = () => {
         return (
             <div className="root">
                 <div className="reservationrow">
-                    <div>Start Time:</div>
-                    <input
-                        type="time"
-                        value={startTime}
-                        onChange={(e) => {
-                            // setStartTime((oldValue) => {
-                            //    return e.target.value;
-                            // });
-                         setStartTime(e.target.value);
-                        }}
-                    />
-                </div>
-                <div className="reservationrow">
-                    <div>End Time:</div>
-                    <input
-                        type="time"
-                        value={endTime}
-                        onChange={(e) => {
-                            // setStartTime((oldValue) => {
-                            //    return e.target.value;
-                            // });
-                         setEndTime(e.target.value);
-                        }}
-                    />
-                </div>
-                <div className="reservationrow">
                     <div>Billing Code:</div>
                     <input
                         type="text"
