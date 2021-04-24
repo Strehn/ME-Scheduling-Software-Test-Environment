@@ -122,10 +122,6 @@ class CalendarScheduler extends Component {
 
         return (
             <div>
-            <select>
-                    <option value="">--Please choose an option--</option>
-                    { machines }
-            </select>
                 <ReservationForm/>
                 <MachineScheduler startHour={7} endHour={20} machines={machines} reservedTimes={reservedTimes} />
 
