@@ -19,6 +19,10 @@ import { getMachines } from '../../actions/machineActions';
 import PropTypes from "prop-types";
 import { compose } from 'redux';
 import { connect } from "react-redux";
+import TextField from '@material-ui/core/TextField';
+import classnames from "classnames";
+import { findCode } from "../../actions/billingActions";
+import { createReservation } from "../../actions/upcomingResActions";
 
 const schedulerData = new SchedulerData(
     new moment().format(DATE_FORMAT),
@@ -39,32 +43,6 @@ schedulerData.setMinuteStep(30);
     We don't know what the machine object will look like so we are guessing for now.
     In the future, we will probably call some server endpoint to get a list of machines.
 */
-const machines = [
-    {
-        id: "lathe_1",
-        name: "Lathe 1",
-    },
-    {
-        id: "lathe_2",
-        name: "Lathe 2"
-    },
-    {
-        id: "computer",
-        name: "Computer"
-    },
-    {
-        id: "printer",
-        name: "3D Printer"
-    },
-    {
-        id: "remote_login_pc",
-        name: "Remote Login PC"
-    },
-    {
-        id: "sindoh",
-        name: "Sindoh 1"
-    }
-]
 
 /*
 We also don't know what the data structure will look like for reserved times on machines.
@@ -92,24 +70,51 @@ const reservedTimes = {
 
 
 class CalendarScheduler extends Component {
-    state = {
-        viewModel: schedulerData,
-        showBookingDialog: false
-    };
 
-    handleClickOpen = () => {
-        // this.setState({ showBookingDialog: true });
-        this.setState(prevState => {
-            return { showBookingDialog: !prevState.showBookingDialog };
-        });
-    };
-
-    handleClose = () => {
-        this.setState({ showBookingDialog: false });
-    };
+  constructor(props) {
+      super(props);
+      this.state = {
+          newRes: [],
+          grads: {},
+          refresh: false,
+          errors: {},
+          value: []
+      };
+  }
 
     componentDidMount() {
         this.props.getMachines();
+    }
+
+    onSubmit = e => {
+    e.preventDefault();
+
+    if (this.state.newRes.resFlg) {
+        this.props.findCode(this.state);
+        this.props.findMachine(this.state.newRes.newRes);
+    }
+    else { window.confirm("Please select a reservation time."); }
+    }
+
+    submitReservation(code, machine) {
+        const reservation = {
+            user: this.state.newRes.newRes.user,
+            id: this.state.newRes.newRes.id,
+            start: this.state.newRes.newRes.start,
+            end: this.state.newRes.newRes.end,
+            resourceId: this.state.newRes.newRes.resourceId,
+            machine: machine,
+            billingCode: code,
+            grad: this.state.value
+        };
+        this.props.createReservation(reservation);
+        this.setState({
+            refresh: true
+        });
+    }
+
+    forceRefresh() {
+        window.location.reload();
     }
 
     storeMachine = e => {
@@ -137,23 +142,23 @@ class CalendarScheduler extends Component {
     }
 
     render() {
-        const { viewModel } = this.state;
-
-        let schedulerData = this.state.viewModel;
-        schedulerData.setResources(this.props.rooms);
-
         const { machines, getMachines } = this.props.machines;
 
-        let machineList = machines.length > 0
-            && machines.map((item, i) => {
-                return (
-                    <option key={i} value={item.id}>{item.name}</option>
-                )
-            }, this);
+        // let machineList = machines.length > 0
+        //     && machines.map((item, i) => {
+        //         return (
+        //             <option key={i} value={item.id}>{item.name}</option>
+        //         )
+        //     }, this);
 
         var curr = new Date();
         curr.setDate(curr.getDate());
         var defaultdate = curr.toISOString().substr(0,10);
+
+        const { errors } = this.state;
+        const { classes } = this.props;
+
+
 
         return (
             <div>
@@ -173,15 +178,15 @@ class CalendarScheduler extends Component {
                 onChange={this.storeMachine}
             >
             <option disabled selected value>--Please choose an option--</option>
-              {machineList}
+              {"machineList"}
               </select>
               </div>
               <div className="reservationrow">
                   <div>Start Time:</div>
                   <input
                       type="time"
-                      min="09:00"
-                      max="18.30"
+                      min="09:00:00"
+                      max="18.30:00"
                       onChange={this.storeStartTime}
                   />
               </div>
@@ -189,27 +194,35 @@ class CalendarScheduler extends Component {
                   <div>End Time:</div>
                   <input
                       type="time"
-                      min="09:30"
-                      max="19:00"
+                      min="09:30:00"
+                      max="19:00:00"
                       onChange={this.storeEndTime}
                   />
               </div>
               <div className="reservationrow">
-                  <div>Grad Student Name:</div>
-                  <input
-                      type="text"
-                      onChange={this.storeGradName}
-                  />
+              <TextField
+                  required
+                  id="gradName"
+                  label="Grad Student Name"
+                  onChange={this.storeGradName}
+                  value={this.state.gradName}
+              />
               </div>
               <div className="reservationrow">
-                  <div>Billing Code:</div>
-                  <input
-                      type="text"
+                  <TextField
+                      required
+                      id="billingCode"
+                      label="Billing Code"
                       onChange={this.storeBillingCode}
+                      value={this.state.billingCode}
+                      error={errors.codenotfound}
+                      helperText={errors.codenotfound}
+                      className={classnames("", {
+                          invalid: errors.codenotfound
+                      })}
                   />
               </div>
-              <button type="button" >Create Reservation</button>
-                // <ReservationForm/>
+              <button type="submit">Create Reservation</button>
                 <MachineScheduler startHour={7} endHour={20} machines={machines} reservedTimes={reservedTimes} />
 
                 {/* <Scheduler
@@ -294,14 +307,17 @@ class CalendarScheduler extends Component {
 }
 
 CalendarScheduler.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-    machines: state.machines
+    machines: state.machines,
+    codes: state.codes,
+    errors: state.errors
 });
 
 // export default DragDropContext(CalendarScheduler)
 export default compose(
-    connect(mapStateToProps, { getMachines })
+    connect(mapStateToProps, { getMachines, findCode, createReservation })
 )(CalendarScheduler);
