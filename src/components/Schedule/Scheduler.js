@@ -89,23 +89,22 @@ class CalendarScheduler extends Component {
     onSubmit = e => {
     e.preventDefault();
 
-    if (this.state.newRes.resFlg) {
-        this.props.findCode(this.state);
-        this.props.findMachine(this.state.newRes.newRes);
-    }
-    else { window.confirm("Please select a reservation time."); }
+    this.props.findCode(this.state.billingCode);
+    this.props.findMachine(this.state.machine);
+
+
     }
 
     submitReservation(code, machine) {
         const reservation = {
             user: this.state.newRes.newRes.user,
             id: this.state.newRes.newRes.id,
-            start: this.state.newRes.newRes.start,
-            end: this.state.newRes.newRes.end,
-            resourceId: this.state.newRes.newRes.resourceId,
+            start: this.state.startTime,
+            end: this.state.endTime,
+            resourceId: this.state.resourceId,
             machine: machine,
             billingCode: code,
-            grad: this.state.value
+            grad: this.state.gradName
         };
         this.props.createReservation(reservation);
         this.setState({
@@ -117,28 +116,21 @@ class CalendarScheduler extends Component {
         window.location.reload();
     }
 
-    storeMachine = e => {
-    this.setState({ value: e.target.value });
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.codes.success && nextProps.codes.codes._id !== undefined) {
+            console.log("found valid billing code, can proceed to submit");
+        }
+
+        if (nextProps.errors) {
+            this.setState({
+                errors: nextProps.errors
+            });
+        }
     }
 
-    storeResDate = e => {
-    this.setState({ value: e.target.value });
-    }
-
-    storeStartTime = e => {
-    this.setState({ value: e.target.value });
-    }
-
-    storeEndTime = e => {
-    this.setState({ value: e.target.value });
-    }
-
-    storeBillingCode = e => {
-    this.setState({ value: e.target.value });
-    }
-
-    storeGradName = e => {
-    this.setState({ value: e.target.value });
+    onChange = e => {
+        this.setState({ [e.target.id]: e.target.value });
+        console.log(e.target.id, e.target.value)
     }
 
     render() {
@@ -166,16 +158,20 @@ class CalendarScheduler extends Component {
             <div className="reservationrow">
             <div>Reservation Date:</div>
             <input
+                id="resDate"
                 type="date"
                 defaultValue={defaultdate}
                 min={defaultdate}
-                onChange={this.storeResDate}
+                onChange={this.onChange}
+                value={this.state.resDate}
             />
               </div>
             <div className="reservationrow">
             <div>Machine:</div>
             <select
-                onChange={this.storeMachine}
+                id="machine"
+                onChange={this.onChange}
+                value={this.state.machine}
             >
             <option disabled selected value>--Please choose an option--</option>
               {"machineList"}
@@ -184,19 +180,23 @@ class CalendarScheduler extends Component {
               <div className="reservationrow">
                   <div>Start Time:</div>
                   <input
+                      id="startTime"
                       type="time"
                       min="09:00:00"
                       max="18.30:00"
-                      onChange={this.storeStartTime}
+                      onChange={this.onChange}
+                      value={this.state.startTime}
                   />
               </div>
               <div className="reservationrow">
                   <div>End Time:</div>
                   <input
+                      id="endTime"
                       type="time"
                       min="09:30:00"
                       max="19:00:00"
-                      onChange={this.storeEndTime}
+                      onChange={this.onChange}
+                      value={this.state.endTime}
                   />
               </div>
               <div className="reservationrow">
@@ -204,7 +204,7 @@ class CalendarScheduler extends Component {
                   required
                   id="gradName"
                   label="Grad Student Name"
-                  onChange={this.storeGradName}
+                  onChange={this.onChange}
                   value={this.state.gradName}
               />
               </div>
@@ -213,7 +213,7 @@ class CalendarScheduler extends Component {
                       required
                       id="billingCode"
                       label="Billing Code"
-                      onChange={this.storeBillingCode}
+                      onChange={this.onChange}
                       value={this.state.billingCode}
                       error={errors.codenotfound}
                       helperText={errors.codenotfound}
