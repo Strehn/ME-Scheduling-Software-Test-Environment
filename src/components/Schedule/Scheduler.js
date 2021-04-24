@@ -147,6 +147,7 @@ class CalendarScheduler extends Component {
             <input
                 type="date"
                 defaultValue={defaultdate}
+                min={defaultdate}
                 onChange={this.storeResDate}
             />
               </div>
