@@ -114,7 +114,10 @@ class CalendarScheduler extends Component {
 
     storeMachine = e => {
     this.setState({ value: e.target.value });
-    console.log(this.state.value);
+    }
+
+    storeResDate = e => {
+    this.setState({ value: e.target.value });
     }
 
     render() {
@@ -132,9 +135,21 @@ class CalendarScheduler extends Component {
                 )
             }, this);
 
+        var curr = new Date();
+        curr.setDate(curr.getDate());
+        var defaultdate = curr.toISOString().substr(0,10);
+
         return (
             <div>
             <h3>Reservation Form</h3>
+            <div className="reservationrow">
+            <div>Reservation Date:</div>
+            <input
+                type="date"
+                defaultValue={defaultdate}
+                onChange={this.storeResDate}
+            />
+              </div>
             <div className="reservationrow">
             <div>Machine:</div>
             <select
