@@ -125,20 +125,55 @@ class CalendarScheduler extends Component {
 
         const { machines, getMachines } = this.props.machines;
 
+        //default case if null (for testing only)
+        const {machineList} = [
+                      {
+                          id: "lathe_1",
+                          name: "Lathe 1"
+                      },
+                      {
+                          id: "lathe_2",
+                          name: "Lathe 2"
+                      },
+                      {
+                          id: "computer",
+                          name: "Computer"
+                      },
+                      {
+                          id: "printer",
+                          name: "3D Printer"
+                      },
+                      {
+                          id: "remote_login_pc",
+                          name: "Remote Login PC"
+                      },
+                      {
+                          id: "sindoh",
+                          name: "Sindoh 1"
+                      }
+                  ];
+
+        if (machines){
         let machineList = machines.length > 0
             && machines.map((item, i) => {
                 return (
                     <option key={i} value={item.id}>{item.name}</option>
                 )
             }, this);
+          }
 
         return (
             <div>
+            <h3>Reservation Form</h3>
+            <div className="reservationrow">
+            <div>Machine:</div>
             <select
                 onChange={this.storeMachine}
             >
+            <option disabled selected value>--Please choose an option--</option>
               {machineList}
               </select>
+              </div>
                 <ReservationForm/>
                 <MachineScheduler startHour={7} endHour={20} machines={machines} reservedTimes={reservedTimes} />
 
