@@ -4,6 +4,10 @@ import {ReservationDataContext} from "../../views/ExternalApi";
 
 import "./styles.css";
 
+import { getMachines } from '../../actions/machineActions';
+import { compose } from 'redux';
+import { connect } from "react-redux";
+
 /*
 
 machines = [
@@ -133,4 +137,10 @@ const MachineScheduler = ({startHour, endHour, day}) => {
     );
 }
 
-export default MachineScheduler;
+const mapStateToProps = state => ({
+    machines: state.machines
+});
+
+export default compose(
+  connect(mapStateToProps, { getMachines })
+)(MachineScheduler);

@@ -3,6 +3,10 @@ import "./styles.css";
 import {ReservationDataContext} from "../../views/ExternalApi";
 import moment from "moment";
 
+import { getMachines } from '../../actions/machineActions';
+import { compose } from 'redux';
+import { connect } from "react-redux";
+
 const ReservationForm = () => {
     const reservationDataObj = React.useContext(ReservationDataContext);
         const [startTime, setStartTime] = useState("");
@@ -88,4 +92,12 @@ const ReservationForm = () => {
         );
 }
 
-export default ReservationForm;
+const mapStateToProps = state => ({
+    machines: state.machines
+});
+
+export default compose(
+  connect(mapStateToProps, { getMachines })
+)(ReservationForm);
+
+// export default ReservationForm;

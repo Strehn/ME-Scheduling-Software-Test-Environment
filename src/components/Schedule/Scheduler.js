@@ -39,32 +39,32 @@ schedulerData.setMinuteStep(30);
     We don't know what the machine object will look like so we are guessing for now.
     In the future, we will probably call some server endpoint to get a list of machines.
 */
-// const machines = [
-//     {
-//         id: "lathe_1",
-//         name: "Lathe 1",
-//     },
-//     {
-//         id: "lathe_2",
-//         name: "Lathe 2"
-//     },
-//     {
-//         id: "computer",
-//         name: "Computer"
-//     },
-//     {
-//         id: "printer",
-//         name: "3D Printer"
-//     },
-//     {
-//         id: "remote_login_pc",
-//         name: "Remote Login PC"
-//     },
-//     {
-//         id: "sindoh",
-//         name: "Sindoh 1"
-//     }
-// ]
+const machines = [
+    {
+        id: "lathe_1",
+        name: "Lathe 1",
+    },
+    {
+        id: "lathe_2",
+        name: "Lathe 2"
+    },
+    {
+        id: "computer",
+        name: "Computer"
+    },
+    {
+        id: "printer",
+        name: "3D Printer"
+    },
+    {
+        id: "remote_login_pc",
+        name: "Remote Login PC"
+    },
+    {
+        id: "sindoh",
+        name: "Sindoh 1"
+    }
+]
 
 /*
 We also don't know what the data structure will look like for reserved times on machines.
@@ -122,6 +122,10 @@ class CalendarScheduler extends Component {
 
         return (
             <div>
+            <select>
+                    <option value="">--Please choose an option--</option>
+                    { machines }
+            </select>
                 <ReservationForm/>
                 <MachineScheduler startHour={7} endHour={20} machines={machines} reservedTimes={reservedTimes} />
 

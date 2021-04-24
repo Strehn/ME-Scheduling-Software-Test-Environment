@@ -175,7 +175,7 @@ export const ExternalApiComponent = () => {
               <h1>Reservations</h1>
               <Content />
               <hr />
-       
+
 
               <Scheduler reservationData={reservationData} />
         </ReservationDataContext.Provider>
