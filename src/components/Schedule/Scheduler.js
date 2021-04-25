@@ -90,7 +90,7 @@ class CalendarScheduler extends Component {
     onSubmit = e => {
     e.preventDefault();
 
-    console.log(this.props.findCode(this.state.billingCode));
+    console.log(this.props.findCode(this.state));
 
 
     }
@@ -203,7 +203,7 @@ class CalendarScheduler extends Component {
                       id="billingCode"
                       label="Billing Code"
                       onChange={this.onChange}
-                      value={this.state.billingCode}
+                      value={this.state.code}
                       error={errors.codenotfound}
                       helperText={errors.codenotfound}
                       className={classnames("", {
