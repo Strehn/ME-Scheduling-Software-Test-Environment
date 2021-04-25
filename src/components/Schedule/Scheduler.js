@@ -130,7 +130,7 @@ class CalendarScheduler extends Component {
 
       if (nextProps.errors) {
               this.setState({
-                  errors: this.props.errors
+                  errors: nextProps.errors
               });
           }
     }
