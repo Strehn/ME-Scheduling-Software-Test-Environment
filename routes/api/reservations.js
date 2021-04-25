@@ -6,10 +6,7 @@ const Reservation = require("../../models/Reservation");
 
 router.get("/getReservations", (req, res) => {
     Reservation.find()
-    .populate("user")
     .populate("billingCode")
-    .populate("machine")
-    .populate("grad")
     .then(reservations => res.json(reservations));
 }
 );
@@ -38,31 +35,25 @@ router.get("/getPastRes", (req, res) => {
 //get for upcoming reservations all students
 router.get("/upcoming/:id", (req, res) => {
     let id = req.params.id;
-    var now = moment().format("YYYY-MM-DD HH:mm:ss");
+    var now = moment().format("MM-DD-YYYY");
 
     Reservation.find({
         user: id,
         start : { $gte : now }
     })
-    .populate("user")
     .populate("billingCode")
-    .populate("machine")
-    .populate("grad")
     .then(reservation => res.json(reservation));
 });
 
 router.get("/past/:id", (req, res) => {
     let id = req.params.id;
-    var now = moment().format("YYYY-MM-DD HH:mm:ss");
+    var now = moment().format("MM-DD-YYYY");
 
     Reservation.find({
         user: id,
         start : { $lt : now }
     })
-    .populate("user")
     .populate("billingCode")
-    .populate("machine")
-    .populate("grad")
     .then(reservation => res.json(reservation));
 });
 

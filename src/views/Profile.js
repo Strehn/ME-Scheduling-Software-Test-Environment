@@ -4,6 +4,7 @@ import { Container, Row, Col } from "reactstrap";
 import Highlight from "../components/Highlight";
 import Loading from "../components/Loading";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
+import UserReservationsTable from "../components/Reservations/UserReservationsTable";
 
 export const ProfileComponent = () => {
   const { user } = useAuth0();
@@ -28,6 +29,7 @@ export const ProfileComponent = () => {
               <div className="mb-5">
           <h2 className="mb-5">Your Reservations</h2>
          </div>
+         {<UserReservationsTable />}
       </Row>
     </Container>
   );
