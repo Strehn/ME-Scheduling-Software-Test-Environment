@@ -82,6 +82,7 @@ router.post("/newReservation", (req, res) => {
     //     } else {
             const newReservation = new Reservation({
                 user: req.body.user,
+                date: req.body.date,
                 // id: req.body.id,
                 start: req.body.start,
                 end: req.body.end,
