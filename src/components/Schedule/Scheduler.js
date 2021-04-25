@@ -200,7 +200,7 @@ class CalendarScheduler extends Component {
               <div className="reservationrow">
                   <TextField
                       required
-                      id="billingCode"
+                      id="code"
                       label="Billing Code"
                       onChange={this.onChange}
                       value={this.state.code}
