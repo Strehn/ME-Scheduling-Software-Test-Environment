@@ -14,6 +14,7 @@ export const GET_USERS = "GET_USERS";
 export const USERS_LOADING = "USERS_LOADING";
 
 export const GET_MACHINES = "GET_MACHINES";
+export const FIND_MACHINE = "FIND_MACHINE";
 export const CREATE_MACHINE = "CREATE_MACHINE";
 export const UPDATE_MACHINE = "UPDATE_MACHINE";
 export const DELETE_MACHINE = "DELETE_MACHINE";

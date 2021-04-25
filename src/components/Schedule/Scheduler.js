@@ -24,6 +24,8 @@ import classnames from "classnames";
 import { findCode } from "../../actions/billingActions";
 import { createReservation } from "../../actions/upcomingResActions";
 import Button from '@material-ui/core/Button';
+import { findMachine } from '../../actions/machineActions';
+import { withAuth0 } from "@auth0/auth0-react";
 
 const schedulerData = new SchedulerData(
     new moment().format(DATE_FORMAT),
@@ -70,6 +72,7 @@ const reservedTimes = {
 };
 
 
+
 class CalendarScheduler extends Component {
 
   constructor(props) {
@@ -85,6 +88,7 @@ class CalendarScheduler extends Component {
 
     componentDidMount() {
         this.props.getMachines();
+
     }
 
     onSubmit = e => {
@@ -96,18 +100,17 @@ class CalendarScheduler extends Component {
 
     }
 
-    submitReservation(code, machine) {
+    submitReservation(code) {
         const reservation = {
-            user: this.state.newRes.newRes.user,
-            id: this.state.newRes.newRes.id,
+            user: this.props.auth0.user.name,
             start: this.state.startTime,
             end: this.state.endTime,
-            resourceId: this.state.resourceId,
-            machine: machine,
+            machine: this.state.machine,
             billingCode: code,
             grad: this.state.gradName
         };
-        this.props.createReservation(reservation);
+        // this.props.createReservation(reservation);
+        console.log({reservation})
         this.setState({
             refresh: true
         });
@@ -124,9 +127,8 @@ class CalendarScheduler extends Component {
 
     componentWillReceiveProps(nextProps) {
       if (nextProps.codes.success && nextProps.codes.codes._id !== undefined) {
-              console.log("ready to submit");
-              // this.submitReservation(nextProps.codes.codes._id, nextProps.machines.machines._id);
-          }
+            this.submitReservation(nextProps.codes.codes._id);
+        }
 
       if (nextProps.errors) {
               this.setState({
@@ -135,15 +137,17 @@ class CalendarScheduler extends Component {
           }
     }
 
+
     render() {
+        const { user } = this.props.auth0;
         const { machines, getMachines } = this.props.machines;
 
-        let machineList = machines.length > 0
-            && machines.map((item, i) => {
-                return (
-                    <option key={i} value={item.id}>{item.name}</option>
-                )
-            }, this);
+        // let machineList = machines.length > 0
+        //     && machines.map((item, i) => {
+        //         return (
+        //             <option key={i} value={item.id}>{item.name}</option>
+        //         )
+        //     }, this);
 
         var curr = new Date();
         curr.setDate(curr.getDate());
@@ -151,7 +155,6 @@ class CalendarScheduler extends Component {
 
         const { errors } = this.state;
         const { classes } = this.props;
-
 
 
         return (
@@ -177,7 +180,7 @@ class CalendarScheduler extends Component {
                 value={this.state.machine}
             >
             <option disabled selected value>--Please choose an option--</option>
-              {machineList}
+              {'machineList'}
               </select>
               </div>
               <div className="reservationrow">
@@ -321,7 +324,6 @@ const mapStateToProps = state => ({
     errors: state.errors
 });
 
-// export default DragDropContext(CalendarScheduler)
 export default compose(
     connect(mapStateToProps, { getMachines, findCode, createReservation })
-)(CalendarScheduler);
+)(withAuth0(CalendarScheduler));

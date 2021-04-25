@@ -77,6 +77,7 @@ export const ExternalApiComponent = () => {
     getAccessTokenSilently,
     loginWithPopup,
     getAccessTokenWithPopup,
+    user
   } = useAuth0();
 
   const handleConsent = async () => {

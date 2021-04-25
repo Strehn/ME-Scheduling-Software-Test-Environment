@@ -5,12 +5,7 @@ const Schema = mongoose.Schema;
 //  Reservation Schema
 const ReservationSchema = new Schema ({
     user: {
-        type: Schema.Types.ObjectId,
-        ref: "users",
-        required: true
-    },
-    id: {
-        type: Number,
+        type: String,
         required: true
     },
     start: {
@@ -19,18 +14,12 @@ const ReservationSchema = new Schema ({
         required: true
     },
     end: {
-        type: String,  
+        type: String,
         //type: Date,
         required: true
     },
-    resourceId: {
-        type: Number,
-        // type: Schema.Types.ObjectId,
-        // ref: "machines",
-        required: true
-    },
     machine: {
-        type: Schema.Types.ObjectId,
+        type: String,
         ref: "machines",
         //required: true
     },
@@ -48,7 +37,7 @@ const ReservationSchema = new Schema ({
         required: true
     },
     grad: {
-        type: Schema.Types.ObjectId,
+        type: String,
         ref: "users"
     },
 });

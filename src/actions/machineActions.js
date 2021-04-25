@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-import { GET_MACHINES, MACHINES_LOADING, CREATE_MACHINE, DELETE_MACHINE, UPDATE_MACHINE } from '../actions/types';
+import { GET_MACHINES, MACHINES_LOADING, CREATE_MACHINE, DELETE_MACHINE, UPDATE_MACHINE, FIND_MACHINE } from '../actions/types';
 
 //Get all machines
 export const getMachines = () => dispatch => {
     dispatch(getMachinesLoading());
-    axios   
+    axios
         .get('/api/machines/getAll')
         .then(res =>
             dispatch({
@@ -31,6 +31,23 @@ export const createMachine = machineData => dispatch => {
             })
         )
         .catch(err => console.log(err));
+};
+
+export const findMachine = machine => dispatch => {
+    axios
+        .post("/api/machines/findMachine", machine)
+        .then(res =>
+            dispatch({
+                type: FIND_MACHINE,
+                payload: res.data
+            })
+        )
+        .catch(err =>
+            dispatch({
+                type: FIND_MACHINE,
+                payload: null
+            })
+        );
 };
 
 export const updateMachine = machineData => dispatch => {
