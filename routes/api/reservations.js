@@ -5,7 +5,7 @@ const router = express.Router();
 const Reservation = require("../../models/Reservation");
 
 router.get("/getReservations", (req, res) => {
-    Reservation.find() 
+    Reservation.find()
     .populate("user")
     .populate("billingCode")
     .populate("machine")
@@ -20,7 +20,7 @@ router.get("/getReservations", (req, res) => {
 //ADMIN
 router.get("/getUpcomingRes", (req, res) => {
     var now = moment().format("YYYY-MM-DD HH:mm:ss");
-    Reservation.find({start : { $gte : now }}) 
+    Reservation.find({start : { $gte : now }})
     .populate("user")
     .populate("billingCode")
     .populate("machine")
@@ -32,7 +32,7 @@ router.get("/getUpcomingRes", (req, res) => {
 //ADMIN
 router.get("/getPastRes", (req, res) => {
     var now = moment().format("YYYY-MM-DD HH:mm:ss");
-    Reservation.find({start : { $lt : now }}) 
+    Reservation.find({start : { $lt : now }})
     .populate("user")
     .populate("billingCode")
     .populate("machine")
@@ -47,7 +47,7 @@ router.get("/upcoming/:id", (req, res) => {
     var now = moment().format("YYYY-MM-DD HH:mm:ss");
 
     Reservation.find({
-        user: id, 
+        user: id,
         start : { $gte : now }
     })
     .populate("user")
@@ -62,7 +62,7 @@ router.get("/past/:id", (req, res) => {
     var now = moment().format("YYYY-MM-DD HH:mm:ss");
 
     Reservation.find({
-        user: id, 
+        user: id,
         start : { $lt : now }
     })
     .populate("user")
@@ -73,25 +73,25 @@ router.get("/past/:id", (req, res) => {
 });
 
 router.post("/newReservation", (req, res) => {
-    //Check for conflicts here??
-    Reservation.findOne({ id: req.body.id }).then(reservation => {
-        if(reservation) {
-            return res.status(400).json({ id: "Reservation id already exists" });
-        } else {
+    // Check for conflicts here??
+    // Reservation.findOne({ id: req.body.id }).then(reservation => {
+    //     if(reservation) {
+    //         return res.status(400).json({ id: "Reservation id already exists" });
+    //     } else {
             const newReservation = new Reservation({
                 user: req.body.user,
-                id: req.body.id,
+                // id: req.body.id,
                 start: req.body.start,
                 end: req.body.end,
-                resourceId: req.body.resourceId,
+                // resourceId: req.body.resourceId,
                 machine: req.body.machine,
                 billingCode: req.body.billingCode,
                 grad: req.body.grad
             });
-
+    //
             newReservation.save().then(reservation => res.json(reservation));
-        }
-    });
+    //     }
+    // });
 });
 
 router.delete("/delete/:id", (req, res) => {
