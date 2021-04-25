@@ -68,9 +68,9 @@ class ManageReservations extends Component {
           columns: [
               { title: 'Start Date', field: 'start' },
               { title: 'End Date', field: 'end' },
-              { title: 'User', field: 'user.name' },
-              { title: 'Grad', field: 'grad.name' },
-              { title: 'Machine ID', field: 'resourceId' },
+              { title: 'User', field: 'user' },
+              { title: 'Grad', field: 'grad' },
+              { title: 'Machine', field: 'machine' },
               { title: 'Billing Code', field: 'billingCode.code' }
           ]
       }
