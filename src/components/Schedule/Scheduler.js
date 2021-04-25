@@ -13,7 +13,7 @@ import MachineScheduler from "../MachineScheduler";
 
 import axios from "../../axios-bookings";
 import BookingDialog from "./BookingDialog";
-import ReservationForm from "../Reservations/ReservationForm";
+// import ReservationForm from "../Reservations/ReservationForm";
 
 import { getMachines } from '../../actions/machineActions';
 import PropTypes from "prop-types";
@@ -90,8 +90,18 @@ class CalendarScheduler extends Component {
     onSubmit = e => {
     e.preventDefault();
 
-    console.log(this.props.findCode(this.state));
+    this.props.findCode(this.state);
 
+    if (this.props.codes.success && this.props.codes.codes._id !== undefined) {
+            console.log("ready to submit");
+            // this.submitReservation(nextProps.codes.codes._id, nextProps.machines.machines._id);
+        }
+
+    if (this.props.errors) {
+            this.setState({
+                errors: this.props.errors
+            });
+        }
 
     }
 
