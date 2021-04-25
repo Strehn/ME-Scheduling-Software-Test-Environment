@@ -23,6 +23,7 @@ import TextField from '@material-ui/core/TextField';
 import classnames from "classnames";
 import { findCode } from "../../actions/billingActions";
 import { createReservation } from "../../actions/upcomingResActions";
+import Button from '@material-ui/core/Button';
 
 const schedulerData = new SchedulerData(
     new moment().format(DATE_FORMAT),
@@ -89,8 +90,7 @@ class CalendarScheduler extends Component {
     onSubmit = e => {
     e.preventDefault();
 
-    this.props.findCode(this.state.billingCode);
-    this.props.findMachine(this.state.machine);
+    console.log(this.props.findCode(this.state.billingCode));
 
 
     }
@@ -116,18 +116,6 @@ class CalendarScheduler extends Component {
         window.location.reload();
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.codes.success && nextProps.codes.codes._id !== undefined) {
-            console.log("found valid billing code, can proceed to submit");
-        }
-
-        if (nextProps.errors) {
-            this.setState({
-                errors: nextProps.errors
-            });
-        }
-    }
-
     onChange = e => {
         this.setState({ [e.target.id]: e.target.value });
         console.log(e.target.id, e.target.value)
@@ -136,12 +124,12 @@ class CalendarScheduler extends Component {
     render() {
         const { machines, getMachines } = this.props.machines;
 
-        // let machineList = machines.length > 0
-        //     && machines.map((item, i) => {
-        //         return (
-        //             <option key={i} value={item.id}>{item.name}</option>
-        //         )
-        //     }, this);
+        let machineList = machines.length > 0
+            && machines.map((item, i) => {
+                return (
+                    <option key={i} value={item.id}>{item.name}</option>
+                )
+            }, this);
 
         var curr = new Date();
         curr.setDate(curr.getDate());
@@ -155,6 +143,7 @@ class CalendarScheduler extends Component {
         return (
             <div>
             <h3>Reservation Form</h3>
+            <form noValidate onSubmit={this.onSubmit}>
             <div className="reservationrow">
             <div>Reservation Date:</div>
             <input
@@ -174,7 +163,7 @@ class CalendarScheduler extends Component {
                 value={this.state.machine}
             >
             <option disabled selected value>--Please choose an option--</option>
-              {"machineList"}
+              {machineList}
               </select>
               </div>
               <div className="reservationrow">
@@ -222,7 +211,8 @@ class CalendarScheduler extends Component {
                       })}
                   />
               </div>
-              <button type="submit">Create Reservation</button>
+              <Button size="small" variant="contained" color="secondary" type="submit">Create Reservation</Button>
+              </form>
                 <MachineScheduler startHour={7} endHour={20} machines={machines} reservedTimes={reservedTimes} />
 
                 {/* <Scheduler
