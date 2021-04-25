@@ -62,7 +62,6 @@ const port = process.env.SERVER_PORT || 5000;
 
 app.use(morgan("dev"));
 app.use(helmet());
-app.use(express.static(join(__dirname, "build")));
 
 const checkJwt = jwt({
   secret: jwksRsa.expressJwtSecret({
@@ -97,4 +96,5 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-app.listen(process.env.PORT || 5000, () => console.log(`Server listening on port ${port}`));
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
