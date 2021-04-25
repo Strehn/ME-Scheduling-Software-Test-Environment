@@ -176,7 +176,7 @@ class CalendarScheduler extends Component {
             <select
                 id="machine"
                 onChange={this.onChange}
-                value={this.state.machine}
+                label={this.state.machine}
             >
             <option disabled selected value>--Please choose an option--</option>
               {machineList}
