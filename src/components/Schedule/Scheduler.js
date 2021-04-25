@@ -144,7 +144,7 @@ class CalendarScheduler extends Component {
         let machineList = machines.length > 0
             && machines.map((item, i) => {
                 return (
-                    <option key={i} value={item.id}>{item.name}</option>
+                    <option key={i} value={item.name}>{item.name}</option>
                 )
             }, this);
 
@@ -176,7 +176,7 @@ class CalendarScheduler extends Component {
             <select
                 id="machine"
                 onChange={this.onChange}
-                label={this.state.machine}
+                value={this.state.machine}
             >
             <option disabled selected value>--Please choose an option--</option>
               {machineList}
