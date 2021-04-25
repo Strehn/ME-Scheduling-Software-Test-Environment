@@ -18,7 +18,7 @@ router.get("/getReservations", (req, res) => {
 router.get("/getUpcomingRes", (req, res) => {
   var nowdate = moment().format("MM-DD-YYYY");
   var nowtime = moment().format("HH:mm");
-    Reservation.find({$and:[date : { $gte : nowdate }, start : { $gte : nowtime }]})
+    Reservation.find({$and:[{date : { $gte : nowdate }}, {start : { $gte : nowtime }}]})
     .populate("billingCode")
     .then(reservations => res.json(reservations));
 }
@@ -28,7 +28,7 @@ router.get("/getUpcomingRes", (req, res) => {
 router.get("/getPastRes", (req, res) => {
     var nowdate = moment().format("MM-DD-YYYY");
     var nowtime = moment().format("HH:mm");
-    Reservation.find({$and:[date : { $lte : nowdate }, start : { $lt : nowtime }]})
+    Reservation.find({$and:[{date : { $lte : nowdate }}, {start : { $lt : nowtime }}]})
     .populate("billingCode")
     .then(reservations => res.json(reservations));
 }
@@ -42,8 +42,8 @@ router.get("/upcoming/:id", (req, res) => {
 
     Reservation.find({
         user: id,
-        $and:[date : { $gte : nowdate },
-        start : { $gte : nowtime }]
+        $and:[{date : { $gte : nowdate }},
+        {start : { $gte : nowtime }}]
     })
     .populate("billingCode")
     .then(reservation => res.json(reservation));
@@ -56,8 +56,8 @@ router.get("/past/:id", (req, res) => {
 
     Reservation.find({
         user: id,
-        $and:[date : { $lte : nowdate },
-        start : { $lt : nowtime }]
+        $and:[{date : { $lte : nowdate }},
+        {start : { $lt : nowtime }}]
     })
     .populate("billingCode")
     .then(reservation => res.json(reservation));
