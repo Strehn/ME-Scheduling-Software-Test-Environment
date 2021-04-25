@@ -92,16 +92,7 @@ class CalendarScheduler extends Component {
 
     this.props.findCode(this.state);
 
-    if (this.props.codes.success && this.props.codes.codes._id !== undefined) {
-            console.log("ready to submit");
-            // this.submitReservation(nextProps.codes.codes._id, nextProps.machines.machines._id);
-        }
 
-    if (this.props.errors) {
-            this.setState({
-                errors: this.props.errors
-            });
-        }
 
     }
 
@@ -129,6 +120,19 @@ class CalendarScheduler extends Component {
     onChange = e => {
         this.setState({ [e.target.id]: e.target.value });
         console.log(e.target.id, e.target.value)
+    }
+
+    componentWillReceiveProps(nextProps) {
+      if (nextProps.codes.success && nextProps.codes.codes._id !== undefined) {
+              console.log("ready to submit");
+              // this.submitReservation(nextProps.codes.codes._id, nextProps.machines.machines._id);
+          }
+
+      if (nextProps.errors) {
+              this.setState({
+                  errors: this.props.errors
+              });
+          }
     }
 
     render() {
