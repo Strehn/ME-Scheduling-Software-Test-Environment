@@ -109,8 +109,7 @@ class CalendarScheduler extends Component {
             billingCode: code,
             grad: this.state.gradName
         };
-        // this.props.createReservation(reservation);
-        console.log({reservation})
+        this.props.createReservation(reservation);
         this.setState({
             refresh: true
         });
@@ -142,12 +141,12 @@ class CalendarScheduler extends Component {
         const { user } = this.props.auth0;
         const { machines, getMachines } = this.props.machines;
 
-        // let machineList = machines.length > 0
-        //     && machines.map((item, i) => {
-        //         return (
-        //             <option key={i} value={item.id}>{item.name}</option>
-        //         )
-        //     }, this);
+        let machineList = machines.length > 0
+            && machines.map((item, i) => {
+                return (
+                    <option key={i} value={item.id}>{item.name}</option>
+                )
+            }, this);
 
         var curr = new Date();
         curr.setDate(curr.getDate());
@@ -180,7 +179,7 @@ class CalendarScheduler extends Component {
                 value={this.state.machine}
             >
             <option disabled selected value>--Please choose an option--</option>
-              {'machineList'}
+              {machineList}
               </select>
               </div>
               <div className="reservationrow">
