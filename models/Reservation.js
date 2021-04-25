@@ -8,6 +8,11 @@ const ReservationSchema = new Schema ({
         type: String,
         required: true
     },
+    date: {
+        format: 'MM-DD-YYYY',
+        type: Date,
+        required: true
+    },
     start: {
         type: String,  //format: 'YYYY-MM-DD HH:MM:SS'
         //type: Date,

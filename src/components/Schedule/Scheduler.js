@@ -103,6 +103,7 @@ class CalendarScheduler extends Component {
     submitReservation(code) {
         const reservation = {
             user: this.props.auth0.user.name,
+            date: moment(this.props.resDate).format('MM-DD-YYYY'),
             start: this.state.startTime,
             end: this.state.endTime,
             machine: this.state.machine,

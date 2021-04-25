@@ -20,7 +20,8 @@ router.get("/getReservations", (req, res) => {
 //ADMIN
 router.get("/getUpcomingRes", (req, res) => {
     var now = moment().format("YYYY-MM-DD HH:mm:ss");
-    Reservation.find({start : { $gte : now }})
+    Reservation.find({date : { $gte : now }})
+    .populate("date")
     .populate("user")
     .populate("billingCode")
     .populate("machine")
@@ -32,7 +33,8 @@ router.get("/getUpcomingRes", (req, res) => {
 //ADMIN
 router.get("/getPastRes", (req, res) => {
     var now = moment().format("YYYY-MM-DD HH:mm:ss");
-    Reservation.find({start : { $lt : now }})
+    Reservation.find({date : { $lt : now }})
+    .populate("date")
     .populate("user")
     .populate("billingCode")
     .populate("machine")

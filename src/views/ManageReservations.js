@@ -66,8 +66,9 @@ class ManageReservations extends Component {
       super(props);
       this.state = {
           columns: [
-              { title: 'Start Date', field: 'start' },
-              { title: 'End Date', field: 'end' },
+              { title: 'Date', field: 'date' },
+              { title: 'Start Time', field: 'start' },
+              { title: 'End Time', field: 'end' },
               { title: 'User', field: 'user' },
               { title: 'Grad', field: 'grad' },
               { title: 'Machine', field: 'machine' },
