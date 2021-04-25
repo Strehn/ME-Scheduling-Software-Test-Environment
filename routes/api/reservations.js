@@ -19,7 +19,7 @@ router.get("/getReservations", (req, res) => {
 // @access at the moment - public
 //ADMIN
 router.get("/getUpcomingRes", (req, res) => {
-    var now = moment().format("YYYY-MM-DD HH:mm:ss");
+    var now = moment().format("MM-DD-YYYY");
     Reservation.find({date : { $gte : now }})
     .populate("date")
     .populate("user")
@@ -32,7 +32,7 @@ router.get("/getUpcomingRes", (req, res) => {
 
 //ADMIN
 router.get("/getPastRes", (req, res) => {
-    var now = moment().format("YYYY-MM-DD HH:mm:ss");
+    var now = moment().format("MM-DD-YYYY");
     Reservation.find({date : { $lt : now }})
     .populate("date")
     .populate("user")
