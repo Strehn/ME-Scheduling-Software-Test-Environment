@@ -21,11 +21,7 @@ router.get("/getReservations", (req, res) => {
 router.get("/getUpcomingRes", (req, res) => {
     var now = moment().format("MM-DD-YYYY");
     Reservation.find({date : { $gte : now }})
-    .populate("date")
-    .populate("user")
     .populate("billingCode")
-    .populate("machine")
-    .populate("grad")
     .then(reservations => res.json(reservations));
 }
 );
@@ -34,11 +30,7 @@ router.get("/getUpcomingRes", (req, res) => {
 router.get("/getPastRes", (req, res) => {
     var now = moment().format("MM-DD-YYYY");
     Reservation.find({date : { $lt : now }})
-    .populate("date")
-    .populate("user")
     .populate("billingCode")
-    .populate("machine")
-    .populate("grad")
     .then(reservations => res.json(reservations));
 }
 );
