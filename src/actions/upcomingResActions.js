@@ -1,10 +1,11 @@
 import axios from 'axios';
 
-import { GET_UPCOMING_RESERVATIONS, RESERVATIONS_LOADING, DELETE_RESERVATION, NEW_RESERVATION } from './types';
+import { GET_UPCOMING_RESERVATIONS, RESERVATIONS_LOADING, DELETE_RESERVATION, NEW_RESERVATION, SEND_MAIL } from './types';
 
 export const createReservation = newReservation => dispatch => {
-    axios
-        .post("/api/reservations/newReservation", newReservation)
+        axios.all([axios.post("/api/reservations/newReservation", newReservation),
+                   axios.post("/api/reservations/sendMail", newReservation)
+        ])
         .then(res =>
             dispatch({
                 type: NEW_RESERVATION,
@@ -17,6 +18,8 @@ export const createReservation = newReservation => dispatch => {
                 payload: null
             })
         );
+
+
 };
 
 export const getUpcomingReservations = () => dispatch => {
@@ -39,7 +42,7 @@ export const getUpcomingReservations = () => dispatch => {
 
 export const getUpcomingResID = id => dispatch => {
     dispatch(setReservationsLoading());
-    axios   
+    axios
         .get(`/api/reservations/upcoming/${id}`)
         .then(res =>
             dispatch({
@@ -56,7 +59,7 @@ export const getUpcomingResID = id => dispatch => {
 };
 
 export const deleteReservation = id => dispatch => {
-    axios   
+    axios
         .delete(`api/reservations/delete/${id}`)
         .then(res =>
             dispatch({

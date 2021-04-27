@@ -2,7 +2,7 @@ const express = require('express')
 const sendMail = express.Router()
 const nodemailer = require('nodemailer')
 const mailConfig = require("../../src/components/NotificationEmail/mail.json");
-
+const router = express.Router();
 
 const transport = {
   //all of the configuration for making a site send an email.
@@ -27,7 +27,7 @@ const transporter = nodemailer.createTransport(transport);
     }
   });
 
-sendMail.post('/', (req,res, next) => {
+router.post('/sendMail', (req,res) => {
   //make mailable object
   const mail = {
     from: mailConfig.MAIL_USER,

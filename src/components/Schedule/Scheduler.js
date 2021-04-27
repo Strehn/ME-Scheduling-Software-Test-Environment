@@ -100,16 +100,9 @@ class CalendarScheduler extends Component {
         this.props.createReservation(reservation);
 
         // console.log(reservation);
-        window.confirm("Reservation Complete");
+        // window.confirm("Reservation Complete");
 
-        axios.post('/api/sendmail', {
-        //make an object to be handled from req.body on the backend.
-        user: this.props.auth0.user.name,
-        start: start,
-        end: end
-        })
-
-        this.forceRefresh();
+        // this.forceRefresh();
 
     }
 
