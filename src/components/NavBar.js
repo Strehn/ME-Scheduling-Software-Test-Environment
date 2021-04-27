@@ -98,7 +98,7 @@ const NavBar = () => {
                 <NavItem>
                   <NavLink
                     tag={RouterNavLink}
-                    to="/external-api"
+                    to="/create-reservation"
                     exact
                     activeClassName="router-link-exact-active"
                   >

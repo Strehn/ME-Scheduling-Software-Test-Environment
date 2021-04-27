@@ -6,7 +6,7 @@ import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Home from "./views/Home";
 import Profile from "./views/Profile";
-import ExternalApi from "./views/ExternalApi";
+import CreateReservation from "./views/CreateReservation";
 import ManageBilling from "./views/ManageBilling";
 import ManageMachines from "./views/ManageMachines";
 import ManageReservations from "./views/ManageReservations";
@@ -52,7 +52,7 @@ const App = () => {
           <Switch>
             <Route path="/" exact component={Home} />
             <Route path="/profile" component={Profile} />
-            <Route path="/external-api" component={ExternalApi} />
+            <Route path="/create-reservation" component={CreateReservation} />
             <Route path="/manage-billing" component={ManageBilling} />
             <Route path="/manage-machines" component={ManageMachines} />
             <Route path="/manage-reservations" component={ManageReservations} />

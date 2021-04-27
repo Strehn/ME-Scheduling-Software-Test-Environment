@@ -1,6 +1,6 @@
 import React from "react";
 import moment from "moment";
-import {ReservationDataContext} from "../../views/ExternalApi";
+import {ReservationDataContext} from "../../views/CreateReservation";
 
 import "./styles.css";
 
