@@ -100,9 +100,9 @@ class CalendarScheduler extends Component {
         this.props.createReservation(reservation);
 
         // console.log(reservation);
-        // window.confirm("Reservation Complete");
+        window.confirm("Reservation Complete");
 
-        // this.forceRefresh();
+        this.forceRefresh();
 
     }
 
