@@ -3,31 +3,38 @@ const moment = require("moment");
 const router = express.Router();
 const nodemailer = require('nodemailer')
 const mailConfig = require("../../src/components/NotificationEmail/mail.json");
+const { google } = require("googleapis");
+const OAuth2 = google.auth.OAuth2;
 
 const Reservation = require("../../models/Reservation");
 
-const transport = {
-  //all of the configuration for making a site send an email.
+const oauth2Client = new OAuth2(
+     mailConfig.ClientID, // ClientID
+     mailConfig.ClientSecret, // Client Secret
+     "https://developers.google.com/oauthplayground" // Redirect URL
+);
 
-  host: 'smtp.gmail.com',
-  port: 587,
-  secure: false,
-  auth: {
-    user: mailConfig.MAIL_USER || 'csmeteam@gmail.com', // TODO: your gmail account
-    pass: mailConfig.MAIL_PASS
-  }
-};
+oauth2Client.setCredentials({
+     refresh_token: mailConfig.RefreshToken
+});
+const accessToken = oauth2Client.getAccessToken()
 
-const transporter = nodemailer.createTransport(transport);
-  transporter.verify((error, success) => {
-    if(error) {
-      //if error happened code ends here
-      console.error(error)
-    } else {
-      //this means success
-      console.log('Mailing Ready')
-    }
-  });
+let transporter = nodemailer.createTransport({
+         host: 'smtp.gmail.com',
+         port: 465,
+         secure: true,
+         auth: {
+             type: 'OAuth2',
+             user: mailConfig.MAIL_USER,
+             accessToken: accessToken,
+             clientId: mailConfig.ClientID,
+            clientSecret: mailConfig.ClientSecret,
+            refreshToken: mailConfig.RefreshToken,
+         },
+     tls: {
+         rejectUnauthorized: false
+     }
+});
 
 router.get("/getReservations", (req, res) => {
     Reservation.find()

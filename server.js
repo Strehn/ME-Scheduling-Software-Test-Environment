@@ -60,7 +60,6 @@ require("./config/passport")(passport);
 app.use("/api/billingcodes", billingcodes);
 app.use("/api/machines", machines);
 app.use("/api/reservations", reservations);
-app.use('/api/sendmail', require('./routes/api/sendMail'))
 
 const port = process.env.SERVER_PORT || 5000;
 
