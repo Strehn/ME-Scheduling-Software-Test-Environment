@@ -1,5 +1,5 @@
 import React from "react";
-import { Router, Route, Switch } from "react-router-dom";
+import { HashRouter, Route, Switch } from "react-router-dom";
 import { Container } from "reactstrap";
 import Loading from "./components/Loading";
 import NavBar from "./components/NavBar";
@@ -45,7 +45,7 @@ const App = () => {
 
   return (
     <Provider  store={store}>
-    <Router history={history}>
+    <HashRouter history={history}>
       <div id="app" className="d-flex flex-column h-100">
         <NavBar />
         <Container className="flex-grow-1 mt-5">
@@ -60,7 +60,7 @@ const App = () => {
         </Container>
         <Footer />
       </div>
-    </Router>
+    </HashRouter>
     </Provider>
   );
 };
