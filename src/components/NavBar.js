@@ -102,7 +102,7 @@ const NavBar = () => {
                     exact
                     activeClassName="router-link-exact-active"
                   >
-                    Reservations
+                    Make Reservation
                   </NavLink>
                 </NavItem>
               )}
