@@ -76,6 +76,8 @@ const NavBar = () => {
       returnTo: window.location.origin,
     });
 
+  console.log(user.["http://localhost:3000/roles"]);
+
   return (
     <div className="nav-container">
       <Navbar color="light" light expand="md">
