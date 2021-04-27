@@ -9,7 +9,6 @@ import UserReservationsTable from "../components/Reservations/UserReservationsTa
 export const ProfileComponent = () => {
   const { user } = useAuth0();
 
-  console.log(user);
 
   return (
     <Container className="mb-5">
@@ -24,6 +23,7 @@ export const ProfileComponent = () => {
         <Col md>
           <h2>{user.nickname}</h2>
           <p className="lead text-muted">{user.email}</p>
+          <p className="lead text-muted">{user.["http://localhost:3000/roles"]}</p>
         </Col>
           </Row>
           <hr />

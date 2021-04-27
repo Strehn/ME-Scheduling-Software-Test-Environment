@@ -86,6 +86,14 @@ class ManageReservations extends Component {
       const { upcomingreservations, getUpcomingReservations } = this.props.upcomingreservations;
       const { pastreservations, getPastReservations } = this.props.pastreservations;
 
+      upcomingreservations.sort(function(a,b){
+        return new Date(a.start) - new Date(b.start);
+      });
+
+      pastreservations.sort(function(a,b){
+        return new Date(b.end) - new Date(a.end);
+      });
+
     return (
       <Fragment>
       <Grid className={classes.dropdown} item xs={12}>

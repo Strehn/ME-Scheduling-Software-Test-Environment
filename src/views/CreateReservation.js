@@ -13,6 +13,7 @@ const { apiOrigin = "http://localhost:3001" } = config;
 export const ReservationDataContext = React.createContext();
 
 
+
 export const ExternalApiComponent = () => {
   const [state, setState] = useState({
     showResult: false,
@@ -20,60 +21,6 @@ export const ExternalApiComponent = () => {
     error: null,
   });
 
-  const [reservationData, setReservationData] = useState({
-    lathe_1: [
-        {
-            startTime: moment(7, "HH").toISOString(),
-            endTime: moment(12, "HH").toISOString()
-        },
-        {
-            startTime: moment(17, "HH").toISOString(),
-            endTime: moment(19, "HH").toISOString()
-        }
-    ],
-    lathe_2: [
-        {
-            startTime: moment(11, "HH").toISOString(),
-            endTime: moment(15, "HH").toISOString()
-        }
-    ],
-    computer: [
-        {
-            startTime: moment(7, "HH").toISOString(),
-            endTime: moment(8, "HH").toISOString()
-        },
-        {
-            startTime: moment(17, "HH").toISOString(),
-            endTime: moment(19, "HH").toISOString()
-        }
-    ],
-    printer: [
-        {
-            startTime: moment(13, "HH").toISOString(),
-            endTime: moment(17, "HH").toISOString()
-        }
-    ],
-    remote_login_pc: [
-        {
-            startTime: moment(8, "HH").toISOString(),
-            endTime: moment(11, "HH").toISOString()
-        },
-        {
-            startTime: moment(18, "HH").toISOString(),
-            endTime: moment(21, "HH").toISOString()
-        }
-    ],
-    sindoh: [
-        {
-            startTime: moment(7, "HH").toISOString(),
-            endTime: moment(9, "HH").toISOString()
-        },
-        {
-            startTime: moment(15, "HH").toISOString(),
-            endTime: moment(17, "HH").toISOString()
-        }
-    ]
-  });
 
   const {
     getAccessTokenSilently,
@@ -81,6 +28,7 @@ export const ExternalApiComponent = () => {
     getAccessTokenWithPopup,
     user
   } = useAuth0();
+
 
   const handleConsent = async () => {
     try {
@@ -174,14 +122,12 @@ export const ExternalApiComponent = () => {
             </a>
           </Alert>
         )}
-        <ReservationDataContext.Provider value={{ reservationData, setReservationData }}>
               <h1>Reservations</h1>
               <Content />
               <hr />
 
 
-              <Scheduler reservationData={reservationData} />
-        </ReservationDataContext.Provider>
+              <Scheduler />
       </div>
     </>
   );

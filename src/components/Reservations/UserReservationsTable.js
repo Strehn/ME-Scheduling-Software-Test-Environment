@@ -82,6 +82,14 @@ class UserReservationsTable extends Component {
       const { upcomingreservations, getUpcomingResID } = this.props.upcomingreservations;
       const { pastreservations, getPastResID } = this.props.pastreservations;
 
+      upcomingreservations.sort(function(a,b){
+        return new Date(a.start) - new Date(b.start);
+      });
+
+      pastreservations.sort(function(a,b){
+        return new Date(b.end) - new Date(a.end);
+      });
+
       return(
         <Fragment>
         <Grid className={classes.dropdown} item xs={12}>

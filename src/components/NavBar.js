@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import { NavLink as RouterNavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import config from "../auth_config.json";
@@ -76,9 +76,15 @@ const NavBar = () => {
       returnTo: window.location.origin,
     });
 
-  console.log(user.["http://localhost:3000/roles"]);
+  const showTools = false;
+
+  if (user.["http://localhost:3000/roles"].includes("Admin")){
+    showTools = true;
+  }
+
 
   return (
+    <Fragment>
     <div className="nav-container">
       <Navbar color="light" light expand="md">
         <Container>
@@ -142,27 +148,28 @@ const NavBar = () => {
                     >
                       <FontAwesomeIcon icon="user" className="mr-3" /> My Reservations
                     </DropdownItem>
-
+                    {showTools &&(
                     <DropdownItem
                       tag={RouterNavLink}
                         to="/manage-billing"
                         className="dropdown-profile"
                         activeClassName="router-link-exact-active"
-
+                        disabled="true"
                      >
                       <FontAwesomeIcon icon="user" className="mr-3" /> Manage Billing Codes
                     </DropdownItem>
-
+                  )}
+                  {showTools &&(
                     <DropdownItem
                       tag={RouterNavLink}
                         to="/manage-machines"
                         className="dropdown-profile"
                         activeClassName="router-link-exact-active"
-
                      >
                       <FontAwesomeIcon icon="user" className="mr-3" /> Manage Machines
                     </DropdownItem>
-
+                    )}
+                    {showTools &&(
                     <DropdownItem
                       tag={RouterNavLink}
                         to="/manage-reservations"
@@ -172,6 +179,7 @@ const NavBar = () => {
                      >
                       <FontAwesomeIcon icon="user" className="mr-3" /> Manage Reservations
                     </DropdownItem>
+                    )}
 
                     <DropdownItem
                       id="qsLogoutBtn"
@@ -221,9 +229,10 @@ const NavBar = () => {
                     to="/profile"
                     activeClassName="router-link-exact-active"
                   >
-                    Profile
+                    My Reservations
                   </RouterNavLink>
                 </NavItem>
+                {showTools &&(
                 <NavItem>
                   <FontAwesomeIcon icon="user" className="mr-3" />
                   <RouterNavLink
@@ -233,6 +242,8 @@ const NavBar = () => {
                     Manage Billing Codes
                   </RouterNavLink>
                 </NavItem>
+              )}
+              {showTools &&(
                 <NavItem>
                   <FontAwesomeIcon icon="user" className="mr-3" />
                   <RouterNavLink
@@ -242,6 +253,8 @@ const NavBar = () => {
                     Manage Machines
                   </RouterNavLink>
                 </NavItem>
+              )}
+              {showTools &&(
                 <NavItem>
                   <FontAwesomeIcon icon="user" className="mr-3" />
                   <RouterNavLink
@@ -251,6 +264,7 @@ const NavBar = () => {
                     Manage Reservations
                   </RouterNavLink>
                 </NavItem>
+              )}
                 <NavItem>
                   <FontAwesomeIcon icon="power-off" className="mr-3" />
                   <RouterNavLink
@@ -267,6 +281,7 @@ const NavBar = () => {
         </Container>
       </Navbar>
     </div>
+    </Fragment>
   );
 };
 

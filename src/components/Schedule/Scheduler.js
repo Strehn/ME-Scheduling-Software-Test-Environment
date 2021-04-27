@@ -157,6 +157,8 @@ class CalendarScheduler extends Component {
         const { errors } = this.state;
         const { classes } = this.props;
 
+        let gradRequired = (user.["http://localhost:3000/roles"].includes("Admin" || "Graduate Student"));
+
 
         return (
             <div>
@@ -204,6 +206,7 @@ class CalendarScheduler extends Component {
                       value={this.state.endTime}
                   />
               </div>
+              {gradRequired &&(
               <div className="reservationrow">
               <TextField
                   required
@@ -213,6 +216,7 @@ class CalendarScheduler extends Component {
                   value={this.state.gradName}
               />
               </div>
+            )}
               <div className="reservationrow">
                   <TextField
                       required
