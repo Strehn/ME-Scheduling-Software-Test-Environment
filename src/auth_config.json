@@ -1,8 +1,0 @@
-{
-  "domain": "mesoftware.us.auth0.com",
-  "clientId": "KiaTw7jULP9op9LMbdHXWluB4qhi6qKh",
-  "audience": "https://mesoftware.us.auth0.com/api/v2/",
-  "appOrigin": "https://localhost:3000",
-  "apiOrigin": "https://localhost:3000",
-  "clientSecret": "lz-PlwUsItbXqfuJOJvQrIJe1F1-fMsYZR2m-SJt0y-G2GJH8aoJ3hznv0z06mTS"
-}
