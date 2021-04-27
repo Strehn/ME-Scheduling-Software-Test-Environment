@@ -27,50 +27,28 @@ import Button from '@material-ui/core/Button';
 import { findMachine } from '../../actions/machineActions';
 import { withAuth0 } from "@auth0/auth0-react";
 
-const schedulerData = new SchedulerData(
-    new moment().format(DATE_FORMAT),
-    ViewTypes.Day,
-    false,
-    false,
-    {
-        displayWeekend: false,
-        headerEnabled: true,
-        dayCellWidth: 30,
-        nonAgendaDayCellHeaderFormat: "M/D|HH:mm"
+import { Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+
+const styles = theme => ({
+    dropdown: {
+        justifyContent: 'space-between',
+        padding: theme.spacing(4)
+    },
+    button: {
+        justifyContent: 'flex-start',
+        padding: theme.spacing(4)
+    },
+    calendar: {
+        justifyContent: 'center'
+    },
+    card: {
+        margin: theme.spacing(2),
     }
-);
-schedulerData.localeMoment.locale("en");
-schedulerData.setMinuteStep(30);
-
-/*
-    We don't know what the machine object will look like so we are guessing for now.
-    In the future, we will probably call some server endpoint to get a list of machines.
-*/
-
-/*
-We also don't know what the data structure will look like for reserved times on machines.
-This should also come from some server call.
-Assuming we get a list of reserved times on some day for some machine.
-*/
-const reservedTimes = {
-    machineid_1: [
-        {
-            startTime: moment(11, "HH").toISOString(),
-            endTime: moment(13, "HH").toISOString()
-        },
-        {
-            startTime: moment(17, "HH").toISOString(),
-            endTime: moment(19, "HH").toISOString()
-        }
-    ],
-    machineid_2: [
-        {
-            startTime: moment(14, "HH").toISOString(),
-            endTime: moment(15, "HH").toISOString()
-        }
-    ]
-};
-
+});
 
 
 class CalendarScheduler extends Component {
@@ -95,30 +73,41 @@ class CalendarScheduler extends Component {
     e.preventDefault();
 
     this.props.findCode(this.state);
-
-
+    this.props.findMachine(this.state);
 
     }
 
-    submitReservation(code) {
+
+    submitReservation(code, machineref) {
+
+        var startmomentObj = moment(moment(this.state.resDate).format('YYYY-MM-DD') + this.state.startTime, "YYYY-MM-DDHH:mm");
+        var start = startmomentObj.format('YYYY-MM-DD HH:mm:ss');
+
+        var endmomentObj = moment(moment(this.state.resDate).format('YYYY-MM-DD') + this.state.endTime, "YYYY-MM-DDHH:mm");
+        var end = endmomentObj.format('YYYY-MM-DD HH:mm:ss');
+
         const reservation = {
             user: this.props.auth0.user.name,
-            date: this.props.resDate.format('MM-DD-YYYY'),
-            start: this.state.startTime,
-            end: this.state.endTime,
-            machine: this.state.machine,
+            start: start,
+            end: end,
+            machine: machineref,
+            resourceId: this.state.resourceId,
             billingCode: code,
             grad: this.state.gradName
         };
+
         this.props.createReservation(reservation);
-        this.setState({
-            refresh: true
-        });
+
+        // console.log(reservation);
+        window.confirm("Reservation Complete");
+        this.forceRefresh();
+
     }
 
     forceRefresh() {
         window.location.reload();
     }
+
 
     onChange = e => {
         this.setState({ [e.target.id]: e.target.value });
@@ -126,14 +115,12 @@ class CalendarScheduler extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-      if (nextProps.codes.success && nextProps.codes.codes._id !== undefined) {
-            this.submitReservation(nextProps.codes.codes._id);
+      if (nextProps.codes.success && nextProps.codes.codes._id !== undefined && nextProps.machines.machines._id !== undefined) {
+            this.submitReservation(nextProps.codes.codes._id, nextProps.machines.machines._id);
+
+
         }
 
-      if (this.state.refresh) {
-            window.confirm("Reservation Complete");
-            this.forceRefresh();
-        }
 
       if (nextProps.errors) {
               this.setState({
@@ -150,13 +137,17 @@ class CalendarScheduler extends Component {
         let machineList = machines.length > 0
             && machines.map((item, i) => {
                 return (
-                    <option key={i} value={item.name}>{item.name}</option>
+                    <option key={i} value={item.id}>{item.name}</option>
                 )
             }, this);
 
-        var curr = new Date();
-        curr.setDate(curr.getDate());
-        var defaultdate = curr.toISOString().substr(0,10);
+        var defaultdate = new Date();
+        var dd = String(defaultdate.getDate()).padStart(2, '0');
+        var mm = String(defaultdate.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = defaultdate.getFullYear();
+
+        defaultdate = yyyy + '-' + mm + '-' + dd;
+
 
         const { errors } = this.state;
         const { classes } = this.props;
@@ -165,7 +156,9 @@ class CalendarScheduler extends Component {
         return (
             <div>
             <h3>Reservation Form</h3>
+            <Card className={classes.card}>
             <form noValidate onSubmit={this.onSubmit}>
+            <CardContent>
             <div className="reservationrow">
             <div>Reservation Date:</div>
             <input
@@ -180,9 +173,9 @@ class CalendarScheduler extends Component {
             <div className="reservationrow">
             <div>Machine:</div>
             <select
-                id="machine"
+                id="resourceId"
                 onChange={this.onChange}
-                value={this.state.machine}
+                value={this.state.resourceId}
             >
             <option disabled selected value>--Please choose an option--</option>
               {machineList}
@@ -190,22 +183,18 @@ class CalendarScheduler extends Component {
               </div>
               <div className="reservationrow">
                   <div>Start Time:</div>
-                  <input
+                  <TextField
                       id="startTime"
                       type="time"
-                      min="09:00:00"
-                      max="18.30:00"
                       onChange={this.onChange}
                       value={this.state.startTime}
                   />
               </div>
               <div className="reservationrow">
                   <div>End Time:</div>
-                  <input
+                  <TextField
                       id="endTime"
                       type="time"
-                      min="09:30:00"
-                      max="19:00:00"
                       onChange={this.onChange}
                       value={this.state.endTime}
                   />
@@ -233,9 +222,12 @@ class CalendarScheduler extends Component {
                       })}
                   />
               </div>
+               </CardContent>
+              <CardActions>
               <Button size="small" variant="contained" color="secondary" type="submit">Create Reservation</Button>
+              </CardActions>
               </form>
-                <MachineScheduler startHour={7} endHour={20} machines={machines} reservedTimes={reservedTimes} />
+              </Card>
 
             </div>
         );
@@ -255,5 +247,6 @@ const mapStateToProps = state => ({
 });
 
 export default compose(
-    connect(mapStateToProps, { getMachines, findCode, createReservation })
+    withStyles(styles),
+    connect(mapStateToProps, { getMachines, findCode, findMachine, createReservation })
 )(withAuth0(CalendarScheduler));

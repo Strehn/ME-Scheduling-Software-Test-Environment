@@ -12,7 +12,7 @@ router.get("/getAll", (req, res) => {
 );
 
 router.post("/newMachine", (req, res) => {
-  
+
     Machine.findOne({ id: req.body.id }).then(machine => {
       if (machine) {
         return res.status(400).json({ id: "Machine already exists" });
@@ -26,6 +26,17 @@ router.post("/newMachine", (req, res) => {
       }
     });
   });
+
+// @route POST api/machines/findMachine
+// @desc Find a machine by calendar id
+// @access Public
+router.post("/findMachine", (req, res) => {
+  Machine.findOne({ id: req.body.resourceId }).then(machineref => {
+    if (machineref) {
+      return res.json(machineref);
+    }
+  });
+});
 
 router.patch("/update", (req, res) => {
   let machineFields = {};

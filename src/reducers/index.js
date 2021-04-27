@@ -11,4 +11,5 @@ export default combineReducers({
   machines: machineReducer,
   upcomingreservations: upcomingResReducer,
   pastreservations: pastResReducer,
+  schedulerData: schedulerReducer
 });

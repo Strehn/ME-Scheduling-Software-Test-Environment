@@ -7,6 +7,7 @@ const Reservation = require("../../models/Reservation");
 router.get("/getReservations", (req, res) => {
     Reservation.find()
     .populate("billingCode")
+    .populate("machine")
     .then(reservations => res.json(reservations));
 }
 );
@@ -16,20 +17,20 @@ router.get("/getReservations", (req, res) => {
 // @access at the moment - public
 //ADMIN
 router.get("/getUpcomingRes", (req, res) => {
-  var nowdate = moment().format("MM-DD-YYYY");
-  var nowtime = moment().format("HH:mm");
-    Reservation.find({$and:[{date : { $gte : nowdate }}, {start : { $gte : nowtime }}]})
+  var now = moment().format("YYYY-MM-DD HH:mm:ss");
+    Reservation.find({ start: { $gte: now } })
     .populate("billingCode")
+    .populate("machine")
     .then(reservations => res.json(reservations));
 }
 );
 
 //ADMIN
 router.get("/getPastRes", (req, res) => {
-    var nowdate = moment().format("MM-DD-YYYY");
-    var nowtime = moment().format("HH:mm");
-    Reservation.find({$and:[{date : { $lte : nowdate }}, {start : { $lt : nowtime }}]})
+  var now = moment().format("YYYY-MM-DD HH:mm:ss");
+    Reservation.find({ start: { $lt: now } })
     .populate("billingCode")
+    .populate("machine")
     .then(reservations => res.json(reservations));
 }
 );
@@ -37,29 +38,27 @@ router.get("/getPastRes", (req, res) => {
 //get for upcoming reservations all students
 router.get("/upcoming/:id", (req, res) => {
     let id = req.params.id;
-    var nowdate = moment().format("MM-DD-YYYY");
-    var nowtime = moment().format("HH:mm");
+    var now = moment().format("YYYY-MM-DD HH:mm:ss");
 
     Reservation.find({
         user: id,
-        $and:[{date : { $gte : nowdate }},
-        {start : { $gte : nowtime }}]
+        start: { $gte: now }
     })
     .populate("billingCode")
+    .populate("machine")
     .then(reservation => res.json(reservation));
 });
 
 router.get("/past/:id", (req, res) => {
     let id = req.params.id;
-    var nowdate = moment().format("MM-DD-YYYY");
-    var nowtime = moment().format("HH:mm");
+    var now = moment().format("YYYY-MM-DD HH:mm:ss");
 
     Reservation.find({
         user: id,
-        $and:[{date : { $lte : nowdate }},
-        {start : { $lt : nowtime }}]
+        start: { $lt: now }
     })
     .populate("billingCode")
+    .populate("machine")
     .then(reservation => res.json(reservation));
 });
 
@@ -69,14 +68,17 @@ router.post("/newReservation", (req, res) => {
     //     if(reservation) {
     //         return res.status(400).json({ id: "Reservation id already exists" });
     //     } else {
+
+    //Generate a random number as the ID for the reservation. No real purpose but adheres to previous team schema
+    var newid = Math.floor(Math.random() * Math.floor(Math.random() * Date.now()))
+
             const newReservation = new Reservation({
+                id: newid,
                 user: req.body.user,
-                date: req.body.date,
-                // id: req.body.id,
                 start: req.body.start,
                 end: req.body.end,
-                // resourceId: req.body.resourceId,
                 machine: req.body.machine,
+                resourceId: req.body.resourceId,
                 billingCode: req.body.billingCode,
                 grad: req.body.grad
             });

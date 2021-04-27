@@ -4,11 +4,11 @@ const Schema = mongoose.Schema;
 
 //  Reservation Schema
 const ReservationSchema = new Schema ({
+  id: {
+  type: Number,
+  required: true
+},
     user: {
-        type: String,
-        required: true
-    },
-    date: {
         type: String,
         required: true
     },
@@ -22,10 +22,14 @@ const ReservationSchema = new Schema ({
         //type: Date,
         required: true
     },
+    resourceId: {
+    type: Number,
+    required: true
+},
     machine: {
-        type: String,
+        type: Schema.Types.ObjectId,
         ref: "machines",
-        //required: true
+        required: true
     },
     title: {
         type: String,

@@ -26,6 +26,7 @@ import { forwardRef } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 
 import { withAuth0 } from "@auth0/auth0-react";
+import { Grid } from '@material-ui/core';
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -59,11 +60,10 @@ class UserReservationsTable extends Component {
         super(props);
         this.state = {
             columns: [
-                { title: 'Date', field: 'date' },
                 { title: 'Start Time', field: 'start' },
                 { title: 'End Time', field: 'end' },
                 { title: 'Graduate', field: 'grad' },
-                { title: 'Machine', field: 'machine' },
+                { title: 'Machine', field: 'machine.name' },
                 { title: 'Billing Code', field: 'billingCode.code' }
             ]
         }
@@ -84,6 +84,7 @@ class UserReservationsTable extends Component {
 
       return(
         <Fragment>
+        <Grid className={classes.dropdown} item xs={12}>
         <MaterialTable
           icons={tableIcons}
           title="Upcoming Reservations"
@@ -103,6 +104,8 @@ class UserReservationsTable extends Component {
               search: false
           }}
       />
+      </Grid>
+      <Grid className={classes.dropdown} item xs={12}>
       <MaterialTable
         icons={tableIcons}
         title="Past Reservations"
@@ -113,6 +116,7 @@ class UserReservationsTable extends Component {
             search: false
         }}
     />
+    </Grid>
     </Fragment>
     );
     }

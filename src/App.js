@@ -44,15 +44,6 @@ const App = () => {
   }
 
   return (
-    <Auth0Provider
-      domain={config.domain}
-      clientId={config.clientId}
-      audience={config.audience}
-      redirectUri={window.location.origin}
-      onRedirectCallback={onRedirectCallback}
-      useRefreshTokens
-      cacheLocation="localstorage"
-    >
     <Provider  store={store}>
     <Router history={history}>
       <div id="app" className="d-flex flex-column h-100">
@@ -71,7 +62,6 @@ const App = () => {
       </div>
     </Router>
     </Provider>
-    </Auth0Provider>
   );
 };
 

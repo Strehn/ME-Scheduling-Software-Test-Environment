@@ -1,4 +1,4 @@
-import { GET_MACHINES, MACHINES_LOADING, CREATE_MACHINE, DELETE_MACHINE, UPDATE_MACHINE } from '../actions/types';
+import { GET_MACHINES, MACHINES_LOADING, CREATE_MACHINE, DELETE_MACHINE, FIND_MACHINE, UPDATE_MACHINE } from '../actions/types';
 
 const initialState = {
     machines: [],
@@ -27,7 +27,7 @@ export default function(state = initialState, action)
                 ...state,
                 machines: [action.payload, ...state.machines]
             }
-        
+
         case UPDATE_MACHINE:
             let index = state.machines.findIndex(
                 machine => machine._id === action.payload._id
@@ -39,7 +39,7 @@ export default function(state = initialState, action)
                 ...state,
                 machines: [action.payload, ...state.machines]
             };
-        
+
         case DELETE_MACHINE:
             return {
                 ...state,
@@ -47,6 +47,13 @@ export default function(state = initialState, action)
                     machine => machine._id !== action.payload
                 )
             };
+
+      case FIND_MACHINE:
+          return {
+              ...state,
+              machines: action.payload,
+              success: true
+          }
 
         default:
             return state;

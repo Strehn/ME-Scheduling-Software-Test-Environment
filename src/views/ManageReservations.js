@@ -66,12 +66,11 @@ class ManageReservations extends Component {
       super(props);
       this.state = {
           columns: [
-              { title: 'Date', field: 'date' },
               { title: 'Start Time', field: 'start' },
               { title: 'End Time', field: 'end' },
               { title: 'User', field: 'user' },
               { title: 'Grad', field: 'grad' },
-              { title: 'Machine', field: 'machine' },
+              { title: 'Machine', field: 'machine.name' },
               { title: 'Billing Code', field: 'billingCode.code' }
           ]
       }
@@ -89,6 +88,7 @@ class ManageReservations extends Component {
 
     return (
       <Fragment>
+      <Grid className={classes.dropdown} item xs={12}>
       <MaterialTable
           icons={tableIcons}
           title="Upcoming Reservations"
@@ -108,7 +108,8 @@ class ManageReservations extends Component {
               search: true
           }}
       />
-
+      </Grid>
+      <Grid className={classes.dropdown} item xs={12}>
       <MaterialTable
           icons={tableIcons}
           title="Past Reservations"
@@ -119,6 +120,7 @@ class ManageReservations extends Component {
               search: true
           }}
       />
+      </Grid>
       </Fragment>
     );
 }
