@@ -17,10 +17,13 @@ const jwtAuthz = require("express-jwt-authz");
 const billingcodes = require("./routes/api/billingcodes");
 const machines = require("./routes/api/machines");
 const reservations = require("./routes/api/reservations");
-
+const mailConfig = require("./src/components/NotificationEmail/mail.json");
+const nodemailer = require('nodemailer');
 
 const appPort = process.env.SERVER_PORT || 3000;
 const appOrigin = authConfig.appOrigin || `http://localhost:${appPort}`;
+
+require('dotenv').config();
 
 const app = express();
 
@@ -57,6 +60,7 @@ require("./config/passport")(passport);
 app.use("/api/billingcodes", billingcodes);
 app.use("/api/machines", machines);
 app.use("/api/reservations", reservations);
+app.use('/api/sendmail', require('./routes/api/sendMail'))
 
 const port = process.env.SERVER_PORT || 5000;
 

@@ -11,7 +11,7 @@ import moment from "moment";
 
 import MachineScheduler from "../MachineScheduler";
 
-import axios from "../../axios-bookings";
+import axios from 'axios';
 import BookingDialog from "./BookingDialog";
 // import ReservationForm from "../Reservations/ReservationForm";
 
@@ -32,6 +32,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
+
 
 const styles = theme => ({
     dropdown: {
@@ -100,6 +101,14 @@ class CalendarScheduler extends Component {
 
         // console.log(reservation);
         window.confirm("Reservation Complete");
+
+        axios.post('/api/sendmail', {
+        //make an object to be handled from req.body on the backend.
+        user: this.props.auth0.user.name,
+        start: start,
+        end: end
+        })
+
         this.forceRefresh();
 
     }
