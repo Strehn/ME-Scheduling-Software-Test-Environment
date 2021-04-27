@@ -19,9 +19,9 @@
 .env.test.local
 .env.production.local
 
-config/keys.js
-src/auth_config.json
-src/components/NotificationEmail/mail.json
+#config/keys.js
+#src/auth_config.json
+#src/components/NotificationEmail/mail.json
 
 npm-debug.log*
 yarn-debug.log*
