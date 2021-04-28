@@ -39,10 +39,10 @@ let transporter = nodemailer.createTransport({
 router.get("/getReservations", (req, res) => {
     Reservation.find()
     .populate("billingCode")
-    .populate("machine")
     .then(reservations => res.json(reservations));
 }
 );
+
 
 // @route GET api/reservations/getUpcomingRes
 // @desc Get all reservations
@@ -52,7 +52,6 @@ router.get("/getUpcomingRes", (req, res) => {
   var now = moment().format("YYYY-MM-DD HH:mm:ss");
     Reservation.find({ start: { $gte: now } })
     .populate("billingCode")
-    .populate("machine")
     .then(reservations => res.json(reservations));
 }
 );
@@ -62,7 +61,6 @@ router.get("/getPastRes", (req, res) => {
   var now = moment().format("YYYY-MM-DD HH:mm:ss");
     Reservation.find({ start: { $lt: now } })
     .populate("billingCode")
-    .populate("machine")
     .then(reservations => res.json(reservations));
 }
 );
@@ -77,7 +75,6 @@ router.get("/upcoming/:id", (req, res) => {
         start: { $gte: now }
     })
     .populate("billingCode")
-    .populate("machine")
     .then(reservation => res.json(reservation));
 });
 
@@ -90,7 +87,6 @@ router.get("/past/:id", (req, res) => {
         start: { $lt: now }
     })
     .populate("billingCode")
-    .populate("machine")
     .then(reservation => res.json(reservation));
 });
 

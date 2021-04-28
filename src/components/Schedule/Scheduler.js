@@ -24,7 +24,7 @@ import classnames from "classnames";
 import { findCode } from "../../actions/billingActions";
 import { createReservation } from "../../actions/upcomingResActions";
 import Button from '@material-ui/core/Button';
-import { findMachine } from '../../actions/machineActions';
+// import { findMachine } from '../../actions/machineActions';
 import { withAuth0 } from "@auth0/auth0-react";
 
 import { Grid } from '@material-ui/core';
@@ -33,7 +33,8 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 
-import Pickadate from 'pickadate/builds/react-dom'
+import Datetime from 'react-datetime';
+import "react-datetime/css/react-datetime.css";
 
 const styles = theme => ({
     dropdown: {
@@ -74,8 +75,9 @@ class CalendarScheduler extends Component {
     onSubmit = e => {
     e.preventDefault();
 
+    // this.props.findMachine(this.state);
     this.props.findCode(this.state);
-    this.props.findMachine(this.state);
+
 
     }
 
@@ -92,8 +94,8 @@ class CalendarScheduler extends Component {
             user: this.props.auth0.user.name,
             start: start,
             end: end,
-            machine: machineref,
             resourceId: this.state.resourceId,
+            machine: this.state.machine,
             billingCode: code,
             grad: this.state.gradName
         };
@@ -111,24 +113,69 @@ class CalendarScheduler extends Component {
         // window.location.reload();
         setTimeout(function(){
            window.location.reload(1);
-        }, 3000);
+        }, 2000);
     }
 
 
     onChange = e => {
         this.setState({ [e.target.id]: e.target.value });
-        // console.log(e.target.id, e.target.value)
     }
+
+    onChangeMachine = e => {
+        this.setState({ ["machine"]: e.target.value });
+        this.setState({ ["resourceId"]: e.target.options.selectedIndex });
+    }
+
+    onStartTimeChange = (e) => {
+        this.setState({...this.state, startTime: e.format("HH:mm")});
+    };
+
+    onEndTimeChange = (e) => {
+        this.setState({...this.state, endTime: e.format("HH:mm")});
+    };
 
     componentWillReceiveProps(nextProps) {
-      if (nextProps.codes.success && nextProps.codes.codes._id !== undefined && nextProps.machines.machines._id !== undefined) {
-            this.submitReservation(nextProps.codes.codes._id, nextProps.machines.machines._id);
+      if (nextProps.codes.success && nextProps.codes.codes._id !== undefined) {
+
+        //Get the start time and 24 hours from current time to check for 24 hours gap
+        var startmomentObj = moment(moment(this.state.resDate).format('YYYY-MM-DD') + this.state.startTime, "YYYY-MM-DDHH:mm");
+        var start = startmomentObj.format('YYYY-MM-DD HH:mm:ss');
+        let tomorrow = moment().add(1,'days').format('YYYY-MM-DD HH:mm:ss')
+
+        //Check if reservation is for 24 hours ahead
+        if (tomorrow > start){
+          window.confirm("ERROR: Invalid Start Time. Reservations must be made 24 hours in advance.")
         }
 
+        //Check if start time is later than 9am
+        else if(this.state.startTime < "09:00" || typeof(this.state.startTime)=="undefined"){
+          window.confirm("ERROR: Invalid Start Time. The machine shop opens at 9am.")
+        }
 
+        //Check if start time is greater than end time
+        else if(this.state.startTime > this.state.endTime){
+          window.confirm("ERROR: Your scheduled start time is greater than end time.")
+        }
+
+        //Check if end time is later than 7pm
+        else if(this.state.endTime > "19:00" || typeof(this.state.startTime)=="undefined"){
+          window.confirm("ERROR: Invalid End Time. The machine shop closes at 7pm.")
+        }
+
+        //All good, proceed to submit
+        else{
+        this.submitReservation(nextProps.codes.codes._id, nextProps.machines.machines._id);
+        }
+        }
 
     }
 
+    timeConstraints = {
+
+    minutes: {
+      step: 30
+    }
+    }
 
     render() {
         const { user } = this.props.auth0;
@@ -137,9 +184,10 @@ class CalendarScheduler extends Component {
         let machineList = machines.length > 0
             && machines.map((item, i) => {
                 return (
-                    <option key={i} value={item.id}>{item.name}</option>
+                    <option key={item.id} value={item.name}>{item.name}</option>
                 )
             }, this);
+
 
         var defaultdate = new Date();
         var dd = String(defaultdate.getDate()).padStart(2, '0');
@@ -152,11 +200,9 @@ class CalendarScheduler extends Component {
         const { errors } = this.state;
         const { classes } = this.props;
 
-        let gradRequired = (user.["http://localhost:3000/roles"].includes("Admin" || "Graduate Student"));
+        let gradRequired = (user.["http://localhost:3000/roles"].includes("Admin")) || (user.["http://localhost:3000/roles"].includes("Graduate Student"));
 
-        const inputProps = {
-          step: 300,
-        };
+
 
         return (
             <div>
@@ -179,13 +225,34 @@ class CalendarScheduler extends Component {
             <div>Machine:</div>
             <select
                 id="resourceId"
-                onChange={this.onChange}
-                value={this.state.resourceId}
+                onChange={this.onChangeMachine}
+                value={this.state.machine}
             >
             <option disabled selected value>--Please choose an option--</option>
               {machineList}
               </select>
               </div>
+              <div className="reservationrow">
+              <div>Start Time:</div>
+              <Datetime
+                  id="startTime"
+                  dateFormat={false}
+                  onChange={this.onStartTimeChange}
+                  timeConstraints={this.timeConstraints}
+                  input={false}
+               />
+              </div>
+              <div className="reservationrow">
+              <div>End Time:</div>
+              <Datetime
+                  id="startTime"
+                  dateFormat={false}
+                  onChange={this.onEndTimeChange}
+                  timeConstraints={this.timeConstraints}
+                  input={false}
+               />
+              </div>
+              {/*
               <div className="reservationrow">
                   <div>Start Time:</div>
                   <TextField
@@ -203,8 +270,8 @@ class CalendarScheduler extends Component {
                       onChange={this.onChange}
                       value={this.state.endTime}
                   />
-              </div>
-              {gradRequired &&(
+              </div>*/}
+              {!gradRequired &&(
               <div className="reservationrow">
               <TextField
                   required
@@ -222,11 +289,6 @@ class CalendarScheduler extends Component {
                       label="Billing Code"
                       onChange={this.onChange}
                       value={this.state.code}
-                      error={errors.codenotfound}
-                      helperText={errors.codenotfound}
-                      className={classnames("", {
-                          invalid: errors.codenotfound
-                      })}
                   />
               </div>
                </CardContent>
@@ -255,5 +317,5 @@ const mapStateToProps = state => ({
 
 export default compose(
     withStyles(styles),
-    connect(mapStateToProps, { getMachines, findCode, findMachine, createReservation })
+    connect(mapStateToProps, { getMachines, findCode, createReservation })
 )(withAuth0(CalendarScheduler));

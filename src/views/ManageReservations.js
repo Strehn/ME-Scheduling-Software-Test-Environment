@@ -70,7 +70,7 @@ class ManageReservations extends Component {
               { title: 'End Time', field: 'end' },
               { title: 'User', field: 'user' },
               { title: 'Grad', field: 'grad' },
-              { title: 'Machine', field: 'machine.name' },
+              { title: 'Machine', field: 'machine' },
               { title: 'Billing Code', field: 'billingCode.code' }
           ]
       }

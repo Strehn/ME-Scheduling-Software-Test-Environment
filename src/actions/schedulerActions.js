@@ -1,4 +1,4 @@
-import { 
+import {
     LOAD_AGENDA_DATA,
     PREV_CLICK,
     NEXT_CLICK,

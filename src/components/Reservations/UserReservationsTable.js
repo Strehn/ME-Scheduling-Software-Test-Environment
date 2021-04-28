@@ -62,9 +62,9 @@ class UserReservationsTable extends Component {
             columns: [
                 { title: 'Start Time', field: 'start' },
                 { title: 'End Time', field: 'end' },
-                { title: 'Graduate', field: 'grad' },
-                { title: 'Machine', field: 'machine.name' },
-                { title: 'Billing Code', field: 'billingCode.code' }
+                { title: 'Machine', field: 'machine' },
+                { title: 'Billing Code', field: 'billingCode.code' },
+                { title: 'Graduate', field: 'grad' }
             ]
         }
     }

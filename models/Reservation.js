@@ -22,13 +22,12 @@ const ReservationSchema = new Schema ({
         //type: Date,
         required: true
     },
-    resourceId: {
-    type: Number,
-    required: true
-},
     machine: {
-        type: Schema.Types.ObjectId,
-        ref: "machines",
+        type: String,
+        required: true
+    },
+    resourceId: {
+        type: Number,
         required: true
     },
     title: {
