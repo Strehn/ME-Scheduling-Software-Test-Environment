@@ -16,6 +16,7 @@ import { Provider } from "react-redux";
 import { Auth0Provider } from "@auth0/auth0-react";
 import store from "./store";
 import config from "./auth_config.json";
+import HttpsRedirect from 'react-https-redirect';
 
 // styles
 import "./App.css";
@@ -45,6 +46,7 @@ const App = () => {
 
   return (
     <Provider  store={store}>
+    <HttpsRedirect>
     <HashRouter history={history}>
       <div id="app" className="d-flex flex-column h-100">
         <NavBar />
@@ -61,6 +63,7 @@ const App = () => {
         <Footer />
       </div>
     </HashRouter>
+    </HttpsRedirect>
     </Provider>
   );
 };

@@ -29,7 +29,7 @@ class Content extends Component {
 
     return (
       <div className="text-center hero my-5">
-        <h2 className="text-center hero my-5">Monthly Schedule</h2>
+        <h2 className="text-center hero my-5">Machine Availability</h2>
         <Grid className={classes.calendar} container item xs={12}>
         <ViewOnlyCalendar />
         </Grid>
