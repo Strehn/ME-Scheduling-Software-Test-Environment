@@ -114,7 +114,7 @@ class CalendarScheduler extends Component {
         // window.location.reload();
         setTimeout(function(){
            window.location.reload(1);
-        }, 2000);
+        }, 2500);
     }
 
 
