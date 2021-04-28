@@ -26,6 +26,7 @@
     "@material-ui/icons": "^4.11.2",
     "antd": "^4.15.3",
     "axios": "^0.21.1",
+    "basic-react-timepicker": "^1.0.0",
     "body-parser": "^1.19.0",
     "concurrently": "^6.0.2",
     "cors": "^2.8.5",
@@ -47,6 +48,7 @@
     "passport": "^0.4.1",
     "passport-auth0": "^1.4.0",
     "passport-jwt": "^4.0.0",
+    "pickadate": "^5.0.0-alpha.3",
     "react": "^16.14.0",
     "react-big-scheduler": "^0.2.6",
     "react-daily-schedule": "^1.4.0",
@@ -59,6 +61,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.4",
     "react-table": "^7.6.3",
+    "react-time-range": "^1.0.4",
     "reactstrap": "^8.0.0",
     "redux-thunk": "^2.3.0",
     "validator": "^13.5.2"

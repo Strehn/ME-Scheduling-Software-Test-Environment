@@ -9,10 +9,10 @@ import "react-big-scheduler/lib/css/style.css";
 import DragDropContext from "./withDnDContext";
 import moment from "moment";
 
-import MachineScheduler from "../MachineScheduler";
+// import MachineScheduler from "../MachineScheduler";
 
 import axios from 'axios';
-import BookingDialog from "./BookingDialog";
+// import BookingDialog from "./BookingDialog";
 // import ReservationForm from "../Reservations/ReservationForm";
 
 import { getMachines } from '../../actions/machineActions';
@@ -33,6 +33,7 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 
+import Pickadate from 'pickadate/builds/react-dom'
 
 const styles = theme => ({
     dropdown: {
@@ -116,22 +117,16 @@ class CalendarScheduler extends Component {
 
     onChange = e => {
         this.setState({ [e.target.id]: e.target.value });
-        console.log(e.target.id, e.target.value)
+        // console.log(e.target.id, e.target.value)
     }
 
     componentWillReceiveProps(nextProps) {
       if (nextProps.codes.success && nextProps.codes.codes._id !== undefined && nextProps.machines.machines._id !== undefined) {
             this.submitReservation(nextProps.codes.codes._id, nextProps.machines.machines._id);
-
-
         }
 
 
-      if (nextProps.errors) {
-              this.setState({
-                  errors: nextProps.errors
-              });
-          }
+
     }
 
 
@@ -159,6 +154,9 @@ class CalendarScheduler extends Component {
 
         let gradRequired = (user.["http://localhost:3000/roles"].includes("Admin" || "Graduate Student"));
 
+        const inputProps = {
+          step: 300,
+        };
 
         return (
             <div>

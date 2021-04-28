@@ -76,7 +76,7 @@ const NavBar = () => {
       returnTo: window.location.origin,
     });
 
-  const showTools = false;
+  var showTools = false;
 
   if (isAuthenticated){
   if (user.["http://localhost:3000/roles"].includes("Admin")){
@@ -155,7 +155,6 @@ const NavBar = () => {
                         to="/manage-billing"
                         className="dropdown-profile"
                         activeClassName="router-link-exact-active"
-                        disabled="true"
                      >
                       <FontAwesomeIcon icon="user" className="mr-3" /> Manage Billing Codes
                     </DropdownItem>
