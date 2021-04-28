@@ -78,10 +78,11 @@ const NavBar = () => {
 
   const showTools = false;
 
+  if (isAuthenticated){
   if (user.["http://localhost:3000/roles"].includes("Admin")){
     showTools = true;
   }
-
+  }
 
   return (
     <Fragment>
