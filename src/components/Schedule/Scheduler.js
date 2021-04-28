@@ -79,6 +79,7 @@ class CalendarScheduler extends Component {
 
     this.props.findCode(this.state)
 
+
     }
 
 
@@ -104,8 +105,9 @@ class CalendarScheduler extends Component {
 
         this.props.createReservation(reservation);
 
-        window.confirm("Reservation Complete. The page will refresh automatically.");
 
+        window.confirm("Reservation Complete. The page will refresh automatically.");
+        //
         this.forceRefresh();
 
     }
@@ -124,7 +126,7 @@ class CalendarScheduler extends Component {
 
     onChangeMachine = e => {
         this.setState({ ["machine"]: e.target.value });
-        this.setState({ ["resourceId"]: e.target.options.selectedIndex-1});
+        this.setState({ ["resourceId"]: e.target.options.selectedIndex});
         this.setState({ ["gradRequired"]: this.props.machines.machines[e.target.options.selectedIndex-1].gradrequired });
     }
 
@@ -137,8 +139,7 @@ class CalendarScheduler extends Component {
     };
 
     componentWillReceiveProps(nextProps) {
-      console.log(nextProps.errors);
-
+      console.log(nextProps)
       if (nextProps.codes.success && nextProps.codes.codes._id !== undefined) {
 
         //Check the role of user scheduling (undergrad or admin/grad)
@@ -166,7 +167,7 @@ class CalendarScheduler extends Component {
 
         //Check if user needs to have a graduate student name submitted
         else if(!isAdmin && (this.state.gradRequired==true) && (this.state.gradName==="")){
-            window.confirm("ERROR: This machine requires a graduate student to be present. Please enter the name of a graduate student.")
+            window.confirm(`ERROR: The ${this.state.machine} requires a graduate student to be present. Please enter the name of a graduate student.`)
         }
 
         //All good, proceed to submit
@@ -175,9 +176,10 @@ class CalendarScheduler extends Component {
         }
         }
 
+
     if (nextProps.errors) {
             this.setState({
-                errors: nextProps.errors
+                errors: nextProps.errors,
             });
         }
 

@@ -92,27 +92,36 @@ router.get("/past/:id", (req, res) => {
 
 router.post("/newReservation", (req, res) => {
     // Check for conflicts here??
-    // Reservation.findOne({ id: req.body.id }).then(reservation => {
-    //     if(reservation) {
-    //         return res.status(400).json({ id: "Reservation id already exists" });
-    //     } else {
+    // Reservation.findOne({ resourceId:req.body.resourceId,
+    //                       $or: [{start: {$gte: req.body.start, $lt: req.body.end}},
+    //                             {end:   {$gte: req.body.start, $lt: req.body.end}}
+    //                             ]
+    //                       }
+    //                     )
+    //            .then(reservation => {
+    //                   if(reservation) {
+    //                     return res.status(404).json({ machinebusy: reservation });
+    //                   } else {
 
-    //Generate a random number as the ID for the reservation. No real purpose but adheres to previous team schema
-    var newid = Math.floor(Math.random() * Math.floor(Math.random() * Date.now()))
+                            //Generate a random number as the ID for the reservation. No real purpose but adheres to previous team schema
+                            var newid = Math.floor(Math.random() * Math.floor(Math.random() * Date.now()))
 
-            const newReservation = new Reservation({
-                id: newid,
-                user: req.body.user,
-                start: req.body.start,
-                end: req.body.end,
-                machine: req.body.machine,
-                resourceId: req.body.resourceId,
-                billingCode: req.body.billingCode,
-                grad: req.body.grad
-            });
+                            const newReservation = new Reservation({
+                                id: newid,
+                                user: req.body.user,
+                                start: req.body.start,
+                                end: req.body.end,
+                                machine: req.body.machine,
+                                resourceId: req.body.resourceId,
+                                billingCode: req.body.billingCode,
+                                grad: req.body.grad
+                            });
 
-            newReservation.save()
-            .then(reservation => res.json(reservation));
+                            newReservation.save()
+                            .then(reservation => res.json(reservation));
+
+                //           }
+                // })
 });
 
 router.post('/sendMail', (req,res) => {

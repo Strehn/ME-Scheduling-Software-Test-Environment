@@ -1,12 +1,13 @@
 import axios from 'axios';
 
-import { GET_UPCOMING_RESERVATIONS, RESERVATIONS_LOADING, DELETE_RESERVATION, NEW_RESERVATION, SEND_MAIL } from './types';
+import { GET_UPCOMING_RESERVATIONS, RESERVATIONS_LOADING, DELETE_RESERVATION, NEW_RESERVATION, SEND_MAIL, GET_ERRORS } from './types';
 
 export const createReservation = newReservation => dispatch => {
   //
-        axios.all([axios.post("/api/reservations/newReservation", newReservation),
-                   axios.post("/api/reservations/sendMail", newReservation)
-        ])
+        // axios.all([axios.post("/api/reservations/newReservation", newReservation),
+        //            axios.post("/api/reservations/sendMail", newReservation)
+        // ])
+        axios.post("/api/reservations/newReservation", newReservation)
         .then(res =>
             dispatch({
                 type: NEW_RESERVATION,
