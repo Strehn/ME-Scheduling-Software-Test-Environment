@@ -20,6 +20,7 @@ router.post("/newMachine", (req, res) => {
         const newMachine = new Machine({
           id: req.body.id,
           name: req.body.name,
+          gradrequired: req.body.gradrequired
         });
 
         newMachine.save().then(machine => res.json(machine));
@@ -43,6 +44,7 @@ router.patch("/update", (req, res) => {
 
   machineFields.id = req.body.id;
   machineFields.name = req.body.name;
+  machineFields.gradrequired = req.body.gradrequired
 
   Machine.findOneAndUpdate(
     { _id: req.body._id },

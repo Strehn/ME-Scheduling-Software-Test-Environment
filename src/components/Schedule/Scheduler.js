@@ -36,6 +36,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Datetime from 'react-datetime';
 import "react-datetime/css/react-datetime.css";
 
+
 const styles = theme => ({
     dropdown: {
         justifyContent: 'space-between',
@@ -59,8 +60,7 @@ class CalendarScheduler extends Component {
   constructor(props) {
       super(props);
       this.state = {
-          newRes: [],
-          grads: {},
+          gradName: "",
           refresh: false,
           errors: {},
           value: []
@@ -76,8 +76,8 @@ class CalendarScheduler extends Component {
     e.preventDefault();
 
     // this.props.findMachine(this.state);
-    this.props.findCode(this.state);
 
+    this.props.findCode(this.state)
 
     }
 
@@ -89,6 +89,8 @@ class CalendarScheduler extends Component {
 
         var endmomentObj = moment(moment(this.state.resDate).format('YYYY-MM-DD') + this.state.endTime, "YYYY-MM-DDHH:mm");
         var end = endmomentObj.format('YYYY-MM-DD HH:mm:ss');
+
+
 
         const reservation = {
             user: this.props.auth0.user.name,
@@ -102,8 +104,7 @@ class CalendarScheduler extends Component {
 
         this.props.createReservation(reservation);
 
-        // console.log(reservation);
-        window.confirm("Reservation Complete");
+        window.confirm("Reservation Complete. The page will refresh automatically.");
 
         this.forceRefresh();
 
@@ -123,7 +124,8 @@ class CalendarScheduler extends Component {
 
     onChangeMachine = e => {
         this.setState({ ["machine"]: e.target.value });
-        this.setState({ ["resourceId"]: e.target.options.selectedIndex });
+        this.setState({ ["resourceId"]: e.target.options.selectedIndex-1});
+        this.setState({ ["gradRequired"]: this.props.machines.machines[e.target.options.selectedIndex-1].gradrequired });
     }
 
     onStartTimeChange = (e) => {
@@ -135,7 +137,12 @@ class CalendarScheduler extends Component {
     };
 
     componentWillReceiveProps(nextProps) {
+      console.log(nextProps.errors);
+
       if (nextProps.codes.success && nextProps.codes.codes._id !== undefined) {
+
+        //Check the role of user scheduling (undergrad or admin/grad)
+        let isAdmin = (this.props.auth0.user.["http://localhost:3000/roles"].includes("Admin")) || (this.props.auth0.user.["http://localhost:3000/roles"].includes("Graduate Student"));
 
         //Get the start time and 24 hours from current time to check for 24 hours gap
         var startmomentObj = moment(moment(this.state.resDate).format('YYYY-MM-DD') + this.state.startTime, "YYYY-MM-DDHH:mm");
@@ -148,13 +155,8 @@ class CalendarScheduler extends Component {
         }
 
         //Check if start time is later than 9am
-        else if(this.state.startTime < "09:00" || typeof(this.state.startTime)=="undefined"){
-          window.confirm("ERROR: Invalid Start Time. The machine shop opens at 9am.")
-        }
-
-        //Check if start time is greater than end time
-        else if(this.state.startTime > this.state.endTime){
-          window.confirm("ERROR: Your scheduled start time is greater than end time.")
+        else if(this.state.startTime < "09:00" || typeof(this.state.startTime)=="undefined" || (this.state.startTime > this.state.endTime)){
+          window.confirm("ERROR: Invalid Start Time. Please confirm it is after 9am and earlier than your end time.")
         }
 
         //Check if end time is later than 7pm
@@ -162,10 +164,21 @@ class CalendarScheduler extends Component {
           window.confirm("ERROR: Invalid End Time. The machine shop closes at 7pm.")
         }
 
+        //Check if user needs to have a graduate student name submitted
+        else if(!isAdmin && (this.state.gradRequired==true) && (this.state.gradName==="")){
+            window.confirm("ERROR: This machine requires a graduate student to be present. Please enter the name of a graduate student.")
+        }
+
         //All good, proceed to submit
         else{
         this.submitReservation(nextProps.codes.codes._id, nextProps.machines.machines._id);
         }
+        }
+
+    if (nextProps.errors) {
+            this.setState({
+                errors: nextProps.errors
+            });
         }
 
     }
@@ -184,10 +197,9 @@ class CalendarScheduler extends Component {
         let machineList = machines.length > 0
             && machines.map((item, i) => {
                 return (
-                    <option key={item.id} value={item.name}>{item.name}</option>
+                    <option key={item.id} value={item.name} gradreq={item.gradrequired.toString()} >{item.name}</option>
                 )
             }, this);
-
 
         var defaultdate = new Date();
         var dd = String(defaultdate.getDate()).padStart(2, '0');
@@ -289,6 +301,11 @@ class CalendarScheduler extends Component {
                       label="Billing Code"
                       onChange={this.onChange}
                       value={this.state.code}
+                      error={errors.codenotfound}
+                      helperText={errors.codenotfound}
+                      className={classnames("", {
+                          invalid: errors.codenotfound
+                      })}
                   />
               </div>
                </CardContent>

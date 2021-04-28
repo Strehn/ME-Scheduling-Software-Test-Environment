@@ -65,7 +65,8 @@ class ManageMachines extends Component {
       this.state = {
           columns: [
               { title: 'ID', field: 'id' },
-              { title: 'Machine', field: 'name' }
+              { title: 'Machine', field: 'name' },
+              { title: 'Grad Supervision For Undergrad Required?', field: 'gradrequired', type: 'boolean' }
           ]
       };
   }

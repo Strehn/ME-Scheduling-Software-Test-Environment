@@ -11,6 +11,10 @@ const MachineSchema = new Schema({
     type: String,
     default: ''
   },
+  gradrequired: {
+    type: Boolean,
+    default: false
+  }
 });
 
 module.exports = Machine = mongoose.model("machines", MachineSchema);
