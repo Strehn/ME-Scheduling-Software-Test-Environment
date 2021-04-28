@@ -34,7 +34,7 @@ const onRedirectCallback = (appState) => {
 };
 
 const App = () => {
-  const { isLoading, error, user } = useAuth0();
+  const { isLoading, error, user, getAccessTokenSilently } = useAuth0();
 
   if (error) {
     return <div>Oops... {error.message}</div>;
