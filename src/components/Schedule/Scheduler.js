@@ -22,7 +22,7 @@ import { connect } from "react-redux";
 import TextField from '@material-ui/core/TextField';
 import classnames from "classnames";
 import { findCode } from "../../actions/billingActions";
-import { createReservation } from "../../actions/upcomingResActions";
+import { createReservation, findConflicts, getUpcomingReservations } from "../../actions/upcomingResActions";
 import Button from '@material-ui/core/Button';
 // import { findMachine } from '../../actions/machineActions';
 import { withAuth0 } from "@auth0/auth0-react";
@@ -63,13 +63,14 @@ class CalendarScheduler extends Component {
           gradName: "",
           refresh: false,
           errors: {},
-          value: []
+          value: [],
+          timeconflict: false
       };
   }
 
     componentDidMount() {
         this.props.getMachines();
-
+        this.props.getUpcomingReservations();
     }
 
     onSubmit = e => {
@@ -77,9 +78,29 @@ class CalendarScheduler extends Component {
 
     // this.props.findMachine(this.state);
 
-    this.props.findCode(this.state)
+    this.props.findCode(this.state);
 
+    var startmomentObj = moment(moment(this.state.resDate).format('YYYY-MM-DD') + this.state.startTime, "YYYY-MM-DDHH:mm");
+    var start = startmomentObj.format('YYYY-MM-DD HH:mm:ss');
 
+    var endmomentObj = moment(moment(this.state.resDate).format('YYYY-MM-DD') + this.state.endTime, "YYYY-MM-DDHH:mm");
+    var end = endmomentObj.format('YYYY-MM-DD HH:mm:ss');
+
+    const reservation = {
+        start: start,
+        end: end,
+        resourceId: this.state.resourceId
+    };
+
+    var possibleconflicts = (this.props.upcomingreservations.upcomingreservations.filter(reservation => reservation.resourceId === this.state.resourceId));
+    var conflictflag = false;
+    for (const times in possibleconflicts){
+      if ((possibleconflicts[times].start >= start && possibleconflicts[times].start < end) || (possibleconflicts[times].end > start && possibleconflicts[times].end <= end)){
+        conflictflag = true;
+        break;
+      }
+    };
+    this.setState({ timeconflict: conflictflag });
     }
 
 
@@ -103,20 +124,25 @@ class CalendarScheduler extends Component {
             grad: this.state.gradName
         };
 
+
         this.props.createReservation(reservation);
 
+        this.setState({
+            refresh: true
+        });
+        // console.log("congrats you get to sleep")
 
-        window.confirm("Reservation Complete. The page will refresh automatically.");
+        // window.confirm("Reservation Complete. The page will refresh automatically.");
         //
-        this.forceRefresh();
+        // this.forceRefresh();
 
     }
 
     forceRefresh() {
-        // window.location.reload();
-        setTimeout(function(){
-           window.location.reload(1);
-        }, 3000);
+        window.location.reload();
+        // setTimeout(function(){
+        //    window.location.reload(1);
+        // }, 2000);
     }
 
 
@@ -139,8 +165,7 @@ class CalendarScheduler extends Component {
     };
 
     componentWillReceiveProps(nextProps) {
-      console.log(nextProps)
-      if (nextProps.codes.success && nextProps.codes.codes._id !== undefined) {
+      if (nextProps.codes.success && nextProps.codes.codes._id !== undefined && !this.state.timeconflict) {
 
         //Check the role of user scheduling (undergrad or admin/grad)
         let isAdmin = (this.props.auth0.user.["http://localhost:3000/roles"].includes("Admin")) || (this.props.auth0.user.["http://localhost:3000/roles"].includes("Graduate Student"));
@@ -156,7 +181,7 @@ class CalendarScheduler extends Component {
         }
 
         //Check if start time is later than 9am
-        else if(this.state.startTime < "09:00" || typeof(this.state.startTime)=="undefined" || (this.state.startTime > this.state.endTime)){
+        else if(this.state.startTime < "09:00" || typeof(this.state.startTime)=="undefined" || (this.state.startTime > this.state.endTime) || (this.state.startTime == this.state.endTime)){
           window.confirm("ERROR: Invalid Start Time. Please confirm it is after 9am and earlier than your end time.")
         }
 
@@ -172,12 +197,24 @@ class CalendarScheduler extends Component {
 
         //All good, proceed to submit
         else{
+          if(nextProps.upcomingreservations===this.props.upcomingreservations){
         this.submitReservation(nextProps.codes.codes._id, nextProps.machines.machines._id);
         }
         }
+        }
+
+    if (this.state.timeconflict){
+      window.confirm(`ERROR: The ${this.state.machine} is busy during that time. Please select an available time.`)
+    }
+
+    if (nextProps.upcomingreservations !== undefined && this.state.refresh) {
+                window.confirm("Reservation Complete");
+                this.forceRefresh();
+            }
 
 
     if (nextProps.errors) {
+        console.log(nextProps.errors);
             this.setState({
                 errors: nextProps.errors,
             });
@@ -195,6 +232,7 @@ class CalendarScheduler extends Component {
     render() {
         const { user } = this.props.auth0;
         const { machines, getMachines } = this.props.machines;
+        const { upcomingreservations, getUpcomingReservations } = this.props.upcomingreservations;
 
         let machineList = machines.length > 0
             && machines.map((item, i) => {
@@ -331,10 +369,11 @@ CalendarScheduler.propTypes = {
 const mapStateToProps = state => ({
     machines: state.machines,
     codes: state.codes,
-    errors: state.errors
+    errors: state.errors,
+    upcomingreservations: state.upcomingreservations
 });
 
 export default compose(
     withStyles(styles),
-    connect(mapStateToProps, { getMachines, findCode, createReservation })
+    connect(mapStateToProps, { getMachines, findCode, findConflicts, createReservation, getUpcomingReservations })
 )(withAuth0(CalendarScheduler));

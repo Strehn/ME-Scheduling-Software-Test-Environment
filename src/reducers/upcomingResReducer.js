@@ -1,8 +1,9 @@
-import { GET_UPCOMING_RESERVATIONS, RESERVATIONS_LOADING, DELETE_RESERVATION, NEW_RESERVATION } from '../actions/types';
+import { FIND_CONFLICTS, GET_UPCOMING_RESERVATIONS, RESERVATIONS_LOADING, DELETE_RESERVATION, NEW_RESERVATION } from '../actions/types';
 
 const initialState = {
     upcomingreservations: [],
-    upcomingreservationsLoading: false
+    upcomingreservationsLoading: false,
+    noconflicts: false
 };
 
 export default function(state = initialState, action)
@@ -13,7 +14,14 @@ export default function(state = initialState, action)
             return {
                 ...state,
                 upcomingreservations: [action.payload, ...state.upcomingreservations]
-            }
+            };
+
+        case FIND_CONFLICTS:
+            return {
+                ...state,
+                upcomingreservations: action.payload,
+                noconflicts: true
+            };
 
         case GET_UPCOMING_RESERVATIONS:
             return {

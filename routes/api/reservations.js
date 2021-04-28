@@ -103,7 +103,7 @@ router.post("/newReservation", (req, res) => {
     //                     return res.status(404).json({ machinebusy: reservation });
     //                   } else {
 
-                            //Generate a random number as the ID for the reservation. No real purpose but adheres to previous team schema
+    //                         Generate a random number as the ID for the reservation. No real purpose but adheres to previous team schema
                             var newid = Math.floor(Math.random() * Math.floor(Math.random() * Date.now()))
 
                             const newReservation = new Reservation({
@@ -122,6 +122,23 @@ router.post("/newReservation", (req, res) => {
 
                 //           }
                 // })
+});
+
+router.post("/findConflicts", (req, res) => {
+    // Check for conflicts here??
+    Reservation.findOne({ resourceId:req.body.resourceId,
+                          $or: [{start: {$gte: req.body.start, $lt: req.body.end}},
+                                {end:   {$gte: req.body.start, $lt: req.body.end}}
+                                ]
+                          }
+                        )
+               .then(reservation => {
+                      if(reservation) {
+                        return res.status(404).json({ machinebusy: reservation });
+                      } else {
+                        return res.json(reservation);
+                          }
+                })
 });
 
 router.post('/sendMail', (req,res) => {

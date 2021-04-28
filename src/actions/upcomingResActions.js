@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-import { GET_UPCOMING_RESERVATIONS, RESERVATIONS_LOADING, DELETE_RESERVATION, NEW_RESERVATION, SEND_MAIL, GET_ERRORS } from './types';
+import { FIND_CONFLICTS, GET_UPCOMING_RESERVATIONS, RESERVATIONS_LOADING, DELETE_RESERVATION, NEW_RESERVATION, SEND_MAIL, GET_ERRORS } from './types';
 
 export const createReservation = newReservation => dispatch => {
   //
-        // axios.all([axios.post("/api/reservations/newReservation", newReservation),
-        //            axios.post("/api/reservations/sendMail", newReservation)
-        // ])
-        axios.post("/api/reservations/newReservation", newReservation)
+        axios.all([axios.post("/api/reservations/newReservation", newReservation),
+                   axios.post("/api/reservations/sendMail", newReservation)
+        ])
+        // axios.post("/api/reservations/newReservation", newReservation)
         .then(res =>
             dispatch({
                 type: NEW_RESERVATION,
@@ -23,6 +23,22 @@ export const createReservation = newReservation => dispatch => {
 
 
 };
+
+export const findConflicts = newReservation => dispatch => {
+    axios
+        .post("/api/reservations/findConflicts", newReservation)
+        .then(res =>
+            dispatch({
+                type: FIND_CONFLICTS,
+                payload: res.data
+            })
+        )
+        .catch(err =>
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+            }));
+}
 
 export const getUpcomingReservations = () => dispatch => {
     dispatch(setReservationsLoading());
