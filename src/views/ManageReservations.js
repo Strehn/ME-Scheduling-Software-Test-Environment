@@ -66,10 +66,10 @@ class ManageReservations extends Component {
       super(props);
       this.state = {
           columns: [
-              { title: 'Start Time', field: 'start' },
-              { title: 'End Time', field: 'end' },
-              { title: 'User', field: 'user' },
-              { title: 'Grad', field: 'grad' },
+              { title: 'Start Time', field: 'start', filtering: false },
+              { title: 'End Time', field: 'end', filtering: false },
+              { title: 'User', field: 'user', filtering: false },
+              { title: 'Grad', field: 'grad', filtering: false },
               { title: 'Machine', field: 'machine' },
               { title: 'Billing Code', field: 'billingCode.code' }
           ]
@@ -113,7 +113,8 @@ class ManageReservations extends Component {
           }}
           options={{
               exportButton: true,
-              search: true
+              search: true,
+              filtering: true
           }}
       />
       </Grid>
@@ -125,7 +126,8 @@ class ManageReservations extends Component {
           data={pastreservations}
           options={{
               exportButton: true,
-              search: true
+              search: true,
+              filtering: true
           }}
       />
       </Grid>
