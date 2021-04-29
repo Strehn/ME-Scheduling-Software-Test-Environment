@@ -147,7 +147,11 @@ router.post('/sendMail', (req,res) => {
     from: mailConfig.MAIL_USER,
     to: req.body.user,
     subject: "ME Machine Shop Reservation Reminder",
-    text: `You have an upcoming reservation at the machine shop from ${req.body.start} to ${req.body.end}`
+    text: `You have an upcoming reservation at the machine shop for the ${req.body.machine} from ${req.body.start} to ${req.body.end}.`,
+    html: '<h2>You have an upcoming reservation at the machine shop</h2>'
+         +'<p><b>Start time: </b>' + req.body.start + '</p>'
+         +'<p><b>End time: </b>' + req.body.end + '</p>'
+         +'<p><b>Machine: </b>' + req.body.machine + '</p>'
   }
   transporter.sendMail(mail, (err,data) => {
         if(err) {
