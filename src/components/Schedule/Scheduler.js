@@ -171,8 +171,10 @@ class CalendarScheduler extends Component {
 
     componentWillReceiveProps(nextProps) {
 
-      if (( nextProps.codes.success && nextProps.codes.codes._id !== undefined && !this.state.timeconflict)
-         || (!this.state.timeconflict && !this.state.codeRequired && this.state.submitted) ){
+
+      if ( ( ( nextProps.codes.success && nextProps.codes.codes._id !== undefined && !this.state.timeconflict)
+         || (!this.state.timeconflict && !this.state.codeRequired && this.state.submitted) )
+         && (nextProps.machines === this.props.machines) ){
 
         //Check the role of user scheduling (undergrad or admin/grad)
         let isAdmin = (this.props.auth0.user.["http://localhost:3000/roles"].includes("Admin")) || (this.props.auth0.user.["http://localhost:3000/roles"].includes("Graduate Student"));
