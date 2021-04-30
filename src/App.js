@@ -34,10 +34,17 @@ const onRedirectCallback = (appState) => {
 };
 
 const App = () => {
-  const { isLoading, error, user, getAccessTokenSilently } = useAuth0();
+  const { isLoading, error, user, getAccessTokenSilently, logout } = useAuth0();
 
   if (error) {
-    return <div>Oops... {error.message}</div>;
+    return (
+      <div>
+      <h1>ERROR: You do not have access to this application.</h1>
+      <p>Ensure that you are using your uidaho.edu email</p>
+      <p>If you are using your uidaho.edu email please complete the verification steps sent to your email</p>
+      <button onClick={() => logout({ returnTo: window.location.origin })}>Click to logout</button>
+      </div>
+    );
   }
 
   if (isLoading) {
