@@ -39,14 +39,17 @@ const ReservationSchema = new Schema ({
         default: '#c41d1d'
     },
     billingCode: {
-        type: Schema.Types.ObjectId,
-        ref: "billingcodes",
-        required: true
+        type: String,
+        default: ""
     },
     grad: {
         type: String,
         ref: "users"
     },
+    notes: {
+      type: String,
+      default: ""
+    }
 });
 
 module.exports = Task = mongoose.model("reservations", ReservationSchema);

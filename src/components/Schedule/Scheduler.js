@@ -64,7 +64,10 @@ class CalendarScheduler extends Component {
           refresh: false,
           errors: {},
           value: [],
-          timeconflict: false
+          timeconflict: false,
+          code: "",
+          codeRequired: false,
+          submitted: false
       };
   }
 
@@ -75,8 +78,6 @@ class CalendarScheduler extends Component {
 
     onSubmit = e => {
     e.preventDefault();
-
-    // this.props.findMachine(this.state);
 
     this.props.findCode(this.state);
 
@@ -100,7 +101,10 @@ class CalendarScheduler extends Component {
         break;
       }
     };
-    this.setState({ timeconflict: conflictflag });
+    this.setState({ timeconflict: conflictflag,
+                    submitted: true
+                  });
+
     }
 
 
@@ -154,6 +158,7 @@ class CalendarScheduler extends Component {
         this.setState({ ["machine"]: e.target.value });
         this.setState({ ["resourceId"]: e.target.options.selectedIndex});
         this.setState({ ["gradRequired"]: this.props.machines.machines[e.target.options.selectedIndex-1].gradrequired });
+        this.setState({ ["codeRequired"]: this.props.machines.machines[e.target.options.selectedIndex-1].billingcoderequired });
     }
 
     onStartTimeChange = (e) => {
@@ -165,7 +170,9 @@ class CalendarScheduler extends Component {
     };
 
     componentWillReceiveProps(nextProps) {
-      if (nextProps.codes.success && nextProps.codes.codes._id !== undefined && !this.state.timeconflict) {
+
+      if (( nextProps.codes.success && nextProps.codes.codes._id !== undefined && !this.state.timeconflict)
+         || (!this.state.timeconflict && !this.state.codeRequired && this.state.submitted) ){
 
         //Check the role of user scheduling (undergrad or admin/grad)
         let isAdmin = (this.props.auth0.user.["http://localhost:3000/roles"].includes("Admin")) || (this.props.auth0.user.["http://localhost:3000/roles"].includes("Graduate Student"));
@@ -177,28 +184,55 @@ class CalendarScheduler extends Component {
 
         //Check if reservation is for 24 hours ahead
         if (tomorrow > start){
-          window.confirm("ERROR: Invalid Start Time. Reservations must be made 24 hours in advance.")
+          window.confirm("ERROR: Invalid Start Time. Reservations must be made 24 hours in advance.");
+          this.setState({
+              submitted: false
+          });
         }
 
         //Check if start time is later than 9am
         else if(this.state.startTime < "09:00" || typeof(this.state.startTime)=="undefined" || (this.state.startTime > this.state.endTime) || (this.state.startTime == this.state.endTime)){
-          window.confirm("ERROR: Invalid Start Time. Please confirm it is after 9am and earlier than your end time.")
+          window.confirm("ERROR: Invalid Start Time. Please confirm it is after 9am and earlier than your end time.");
+          this.setState({
+              submitted: false
+          });
         }
 
         //Check if end time is later than 7pm
         else if(this.state.endTime > "19:00" || typeof(this.state.startTime)=="undefined"){
-          window.confirm("ERROR: Invalid End Time. The machine shop closes at 7pm.")
+          window.confirm("ERROR: Invalid End Time. The machine shop closes at 7pm.");
+          this.setState({
+              submitted: false
+          });
         }
 
         //Check if user needs to have a graduate student name submitted
         else if(!isAdmin && (this.state.gradRequired==true) && (this.state.gradName==="")){
             window.confirm(`ERROR: The ${this.state.machine} requires a graduate student to be present. Please enter the name of a graduate student.`)
+            this.setState({
+                submitted: false
+            });
         }
+
+        // else if(!isAdmin && (this.state.billingcodeRequired==true) && (!nextProps.codes.code.success)){
+        //     window.confirm(`ERROR: The ${this.state.machine} requires a valid billing code entered.`)
+        // }
 
         //All good, proceed to submit
         else{
           if(nextProps.upcomingreservations===this.props.upcomingreservations){
-        this.submitReservation(nextProps.codes.codes._id, nextProps.machines.machines._id);
+            if(this.state.codeRequired){
+              this.submitReservation(nextProps.codes.codes.code, nextProps.machines.machines._id);
+              this.setState({
+                  submitted: true
+              });
+            }
+            else{
+              this.submitReservation("", nextProps.machines.machines._id);
+              this.setState({
+                  submitted: true
+              });
+            }
         }
         }
         }
@@ -214,11 +248,16 @@ class CalendarScheduler extends Component {
 
 
     if (nextProps.errors) {
-        console.log(nextProps.errors);
+        if((this.state.codeRequired==true) && (!nextProps.codes.success) && nextProps.codes.codes._id === undefined){
+          window.confirm(`ERROR: The ${this.state.machine} requires a valid billing code entered.`)
+        }
             this.setState({
                 errors: nextProps.errors,
+                submitted: false
             });
         }
+
+    // this.setState({ submitted: false });
 
     }
 
@@ -237,7 +276,7 @@ class CalendarScheduler extends Component {
         let machineList = machines.length > 0
             && machines.map((item, i) => {
                 return (
-                    <option key={item.id} value={item.name} gradreq={item.gradrequired.toString()} >{item.name}</option>
+                    <option key={item.id} value={item.name} gradreq={item.gradrequired.toString()} billingcodereq={item.billingcoderequired.toString()} >{item.name}</option>
                 )
             }, this);
 
@@ -326,7 +365,6 @@ class CalendarScheduler extends Component {
               {!gradRequired &&(
               <div className="reservationrow">
               <TextField
-                  required
                   id="gradName"
                   label="Grad Student Name"
                   onChange={this.onChange}
@@ -336,7 +374,6 @@ class CalendarScheduler extends Component {
             )}
               <div className="reservationrow">
                   <TextField
-                      required
                       id="code"
                       label="Billing Code"
                       onChange={this.onChange}
@@ -350,7 +387,11 @@ class CalendarScheduler extends Component {
               </div>
                </CardContent>
               <CardActions>
-              <Button size="small" variant="contained" color="secondary" type="submit">Create Reservation</Button>
+              <Button size="small"
+                      variant="contained"
+                      color="secondary"
+                      type="submit"
+                      disabled={this.state.submitted}> Create Reservation</Button>
               </CardActions>
               </form>
               </Card>
@@ -370,7 +411,8 @@ const mapStateToProps = state => ({
     machines: state.machines,
     codes: state.codes,
     errors: state.errors,
-    upcomingreservations: state.upcomingreservations
+    upcomingreservations: state.upcomingreservations,
+    coderequired: state.coderequired
 });
 
 export default compose(

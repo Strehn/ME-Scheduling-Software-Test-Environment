@@ -63,7 +63,7 @@ class UserReservationsTable extends Component {
                 { title: 'Start Time', field: 'start' },
                 { title: 'End Time', field: 'end' },
                 { title: 'Machine', field: 'machine' },
-                { title: 'Billing Code', field: 'billingCode.code' },
+                { title: 'Billing Code', field: 'billingCode' },
                 { title: 'Graduate', field: 'grad' }
             ]
         }
@@ -102,7 +102,7 @@ class UserReservationsTable extends Component {
               onRowDelete: oldData =>
                   new Promise((resolve, reject) => {
                       setTimeout(() => {
-                          this.props.deleteReservation(oldData._id)
+                          this.props.deleteReservation(oldData._id, oldData)
                           resolve()
                       }, 1000)
                   }),

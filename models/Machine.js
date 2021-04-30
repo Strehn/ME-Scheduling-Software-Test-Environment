@@ -14,6 +14,10 @@ const MachineSchema = new Schema({
   gradrequired: {
     type: Boolean,
     default: false
+  },
+  billingcoderequired: {
+    type: Boolean,
+    default: false
   }
 });
 

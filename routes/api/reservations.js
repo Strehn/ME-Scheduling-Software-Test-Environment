@@ -38,7 +38,6 @@ let transporter = nodemailer.createTransport({
 
 router.get("/getReservations", (req, res) => {
     Reservation.find()
-    .populate("billingCode")
     .then(reservations => res.json(reservations));
 }
 );
@@ -51,7 +50,6 @@ router.get("/getReservations", (req, res) => {
 router.get("/getUpcomingRes", (req, res) => {
   var now = moment().format("YYYY-MM-DD HH:mm:ss");
     Reservation.find({ start: { $gte: now } })
-    .populate("billingCode")
     .then(reservations => res.json(reservations));
 }
 );
@@ -60,7 +58,6 @@ router.get("/getUpcomingRes", (req, res) => {
 router.get("/getPastRes", (req, res) => {
   var now = moment().format("YYYY-MM-DD HH:mm:ss");
     Reservation.find({ start: { $lt: now } })
-    .populate("billingCode")
     .then(reservations => res.json(reservations));
 }
 );
@@ -74,7 +71,6 @@ router.get("/upcoming/:id", (req, res) => {
         user: id,
         start: { $gte: now }
     })
-    .populate("billingCode")
     .then(reservation => res.json(reservation));
 });
 
@@ -86,8 +82,23 @@ router.get("/past/:id", (req, res) => {
         user: id,
         start: { $lt: now }
     })
-    .populate("billingCode")
     .then(reservation => res.json(reservation));
+});
+
+router.patch("/past/update", (req, res) => {
+  let pastResFields = {};
+
+  pastResFields.notes = req.body.notes;
+
+  Reservation.findOneAndUpdate(
+    { _id: req.body._id },
+    { $set: pastResFields },
+    { new: true }
+  )
+  .then(reservation => {
+    res.json(reservation);
+  })
+  .catch(err => console.log(err));
 });
 
 router.post("/newReservation", (req, res) => {
@@ -168,9 +179,32 @@ router.post('/sendMail', (req,res) => {
 
 router.delete("/delete/:id", (req, res) => {
     Reservation.findById(req.params.id).then(reservation => {
-        reservation.remove().then(() => res.json({success: true}));
+        reservation.remove().then(() => res.json({success: true})
+      );
     });
 }
 );
+
+router.post('/sendCancellationMail', (req,res) => {
+    const mail = {
+      from: mailConfig.MAIL_USER,
+      to: req.body.user,
+      subject: "ME Machine Shop Reservation Cancelled",
+      text: `Your upcoming reservation at the machine shop for the ${req.body.machine} from ${req.body.start} to ${req.body.end} was cancelled.`,
+      html: '<h2>Your upcoming reservation at the machine shop was cancelled</h2>'
+           +'<p><b>Start time: </b>' + req.body.start + '</p>'
+           +'<p><b>End time: </b>' + req.body.end + '</p>'
+           +'<p><b>Machine: </b>' + req.body.machine + '</p>'
+    }
+
+    transporter.sendMail(mail, (err,data) => {
+          if(err) {
+            console.log(err)
+          } else {
+            return res.json({success: true})
+          }
+        })
+});
+
 
 module.exports = router;

@@ -1,4 +1,4 @@
-import { GET_PAST_RESERVATIONS, PAST_RESERVATIONS_LOADING } from '../actions/types';
+import { GET_PAST_RESERVATIONS, PAST_RESERVATIONS_LOADING, UPDATE_PAST_RESERVATIONS } from '../actions/types';
 
 const initialState = {
     pastreservations: [],
@@ -13,6 +13,19 @@ export default function(state = initialState, action)
             return {
                 ...state,
                 pastreservations: action.payload,
+                pastreservationsLoading: false
+            };
+
+        case UPDATE_PAST_RESERVATIONS:
+            let index = state.pastreservations.findIndex(
+                reservation => reservation._id === action.payload._id
+            );
+
+            state.pastreservations.splice(index, 1);
+
+            return {
+                ...state,
+                pastreservations: [action.payload, ...state.pastreservations],
                 pastreservationsLoading: false
             };
 

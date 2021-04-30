@@ -66,7 +66,8 @@ class ManageMachines extends Component {
           columns: [
               { title: 'ID', field: 'id' },
               { title: 'Machine', field: 'name' },
-              { title: 'Grad Supervision For Undergrad Required?', field: 'gradrequired', type: 'boolean' }
+              { title: 'Grad Supervision For Undergrad Required?', field: 'gradrequired', type: 'boolean' },
+              { title: 'Billing Code Required?', field: 'billingcoderequired', type: 'boolean' }
           ]
       };
   }

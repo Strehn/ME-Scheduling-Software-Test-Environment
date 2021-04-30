@@ -2,13 +2,13 @@ import React, { Component, Fragment } from "react";
 import { Container, Row, Col } from "reactstrap";
 import PropTypes from "prop-types";
 import { getUpcomingReservations, deleteReservation } from "../actions/upcomingResActions";
-import { getPastReservations } from "../actions/pastResActions"
+import { getPastReservations, updatePastRes } from "../actions/pastResActions"
 import { compose } from 'redux';
 import { connect } from "react-redux";
 
 import Highlight from "../components/Highlight";
 import Loading from "../components/Loading";
-import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
+import { useAuth0, withAuthenticationRequired, withAuth0 } from "@auth0/auth0-react";
 import { Button, Alert } from "reactstrap";
 
 import MaterialTable from 'material-table';
@@ -56,7 +56,7 @@ const tableIcons = {
 const styles = theme => ({
     dropdown: {
         justifyContent: 'flex-start',
-        padding: theme.spacing(4)
+        padding: theme.spacing(1)
     },
 });
 
@@ -71,7 +71,16 @@ class ManageReservations extends Component {
               { title: 'User', field: 'user', filtering: false },
               { title: 'Grad', field: 'grad', filtering: false },
               { title: 'Machine', field: 'machine' },
-              { title: 'Billing Code', field: 'billingCode.code' }
+              { title: 'Billing Code', field: 'billingCode' }
+          ],
+          pastcolumns: [
+              { title: 'Start Time', field: 'start', filtering: false, editable: false },
+              { title: 'End Time', field: 'end', filtering: false, editable: false },
+              { title: 'User', field: 'user', filtering: false, editable: false },
+              { title: 'Grad', field: 'grad', filtering: false, editable: false },
+              { title: 'Machine', field: 'machine', editable: false },
+              { title: 'Billing Code', field: 'billingCode', editable: false },
+              { title: 'Notes', field: 'notes', filtering: false }
           ]
       }
   }
@@ -82,6 +91,7 @@ class ManageReservations extends Component {
   }
 
     render(){
+      const { user } = this.props.auth0;
       const { classes } = this.props;
       const { upcomingreservations, getUpcomingReservations } = this.props.upcomingreservations;
       const { pastreservations, getPastReservations } = this.props.pastreservations;
@@ -90,9 +100,12 @@ class ManageReservations extends Component {
         return new Date(a.start) - new Date(b.start);
       });
 
+
       pastreservations.sort(function(a,b){
         return new Date(b.end) - new Date(a.end);
       });
+
+
 
     return (
       <Fragment>
@@ -106,7 +119,7 @@ class ManageReservations extends Component {
               onRowDelete: oldData =>
                   new Promise((resolve, reject) => {
                       setTimeout(() => {
-                          this.props.deleteReservation(oldData._id)
+                          this.props.deleteReservation(oldData._id, oldData)
                           resolve()
                       }, 1000)
                   }),
@@ -122,12 +135,22 @@ class ManageReservations extends Component {
       <MaterialTable
           icons={tableIcons}
           title="Past Reservations"
-          columns={this.state.columns}
+          columns={this.state.pastcolumns}
           data={pastreservations}
           options={{
               exportButton: true,
               search: true,
-              filtering: true
+              filtering: true,
+
+          }}
+          editable={{
+              onRowUpdate: (newData, oldData) =>
+                  new Promise((resolve, reject) => {
+                      setTimeout(() => {
+                          this.props.updatePastRes(newData);
+                          resolve()
+                      }, 1000)
+                  })
           }}
       />
       </Grid>
@@ -152,5 +175,5 @@ const mapStateToProps = state => ({
 
 export default compose(
     withStyles(styles),
-    connect(mapStateToProps, { getUpcomingReservations, getPastReservations, deleteReservation })
-)(ManageReservations);
+    connect(mapStateToProps, { getUpcomingReservations, getPastReservations, deleteReservation, updatePastRes })
+)(withAuth0(ManageReservations));

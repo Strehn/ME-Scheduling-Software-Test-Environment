@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { GET_PAST_RESERVATIONS, PAST_RESERVATIONS_LOADING } from './types';
+import { GET_PAST_RESERVATIONS, PAST_RESERVATIONS_LOADING, UPDATE_PAST_RESERVATIONS } from './types';
 
 export const getPastReservations = () => dispatch => {
     dispatch(setPastReservationsLoading());
@@ -22,7 +22,7 @@ export const getPastReservations = () => dispatch => {
 
 export const getPastResID = id => dispatch => {
     dispatch(setPastReservationsLoading());
-    axios   
+    axios
         .get(`/api/reservations/past/${id}`)
         .then(res =>
             dispatch({
@@ -36,6 +36,18 @@ export const getPastResID = id => dispatch => {
                 payload: null
             })
         );
+};
+
+export const updatePastRes = pastResData => dispatch => {
+    axios
+        .patch(`/api/reservations/past/update`, pastResData)
+        .then(res =>
+            dispatch({
+                type: UPDATE_PAST_RESERVATIONS,
+                payload: res.data
+            })
+        )
+        .catch(err => console.log(err));
 };
 
 export const setPastReservationsLoading = () => {

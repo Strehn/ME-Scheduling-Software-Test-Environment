@@ -76,10 +76,10 @@ export const getUpcomingResID = id => dispatch => {
         );
 };
 
-export const deleteReservation = id => dispatch => {
-    axios
-        .delete(`api/reservations/delete/${id}`)
-        .then(res =>
+export const deleteReservation = (id, info) => dispatch => {
+    axios.all([axios.delete(`api/reservations/delete/${id}`),
+               axios.post("/api/reservations/sendCancellationMail", info)])
+         .then(res =>
             dispatch({
                 type: DELETE_RESERVATION,
                 payload: id
